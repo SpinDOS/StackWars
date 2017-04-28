@@ -42,11 +42,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logger\ILogger.cs" />
+    <Compile Include="Abilities\Ability.cs" />
+    <Compile Include="Units\ArcherUnit.cs" />
+    <Compile Include="Army.cs" />
+    <Compile Include="CostAttribute.cs" />
+    <Compile Include="GameEngine.cs" />
+    <Compile Include="Units\HeavyInfantry.cs" />
+    <Compile Include="Units\Interfaces\IAbilitiable.cs" />
+    <Compile Include="Units\Interfaces\IRangedUnit.cs" />
+    <Compile Include="UnitFactory\IUnitCreator.cs" />
+    <Compile Include="Units\Interfaces\IUnit.cs" />
+    <Compile Include="Units\LigthInfantry.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Units\SimpleUnit.cs" />
+    <Compile Include="UnitFactory\RandomUnitFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
