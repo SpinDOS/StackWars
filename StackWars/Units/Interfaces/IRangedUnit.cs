@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StackWars.Units
+﻿namespace StackWars.Units.Interfaces
 {
-    interface IRangedUnit : IAbilitiable
+    public interface IRangedUnit : IUnit
     {
         int Range { get; set; }
         int RangeAttack { get; set; }

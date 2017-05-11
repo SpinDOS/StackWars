@@ -1,6 +1,6 @@
-﻿using StackWars.Units;
+﻿using StackWars.Units.Interfaces;
 
-namespace StackWars
+namespace StackWars.UnitFactory
 {
     public interface IUnitFactory
     {

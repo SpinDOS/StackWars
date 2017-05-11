@@ -1,33 +1,28 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StackWars.Logger;
 using StackWars.Abilities;
-using StackWars.Units;
+using StackWars.Logger;
+using StackWars.Units.Interfaces;
 
-namespace StackWars
+namespace StackWars.Units
 {
     public abstract class SimpleUnit : IUnit
     {
-        protected ILogger Logger { get; }
-        protected SimpleUnit(ILogger logger)
-        {
-            Logger = logger;
-        }
-        public virtual int MaxHealth { get; set; }
-        public virtual int Health { get; set; }
-        public virtual int Attack { get; set; }
-        public virtual int Defense { get; set; }
+        public int MaxHealth { get; set; }
+        public int CurrentHealth { get; set; }
+        public int Attack { get; set; }
+        public int Defense { get; set; }
         public override string ToString() => 
-            $"{this.GetType().Name}: Health: {Health}, Attack: {Attack}, Defense: {Defense}";
+            $"{this.GetType().Name}: Health: {CurrentHealth}, Attack: {Attack}, Defense: {Defense}";
 
         public abstract IUnit Clone();
+        public virtual IEnumerable<Ability> MakeTurn() => Enumerable.Empty<Ability>();
+
         protected virtual IUnit Clone(IUnit pretendent)
         {
             pretendent.MaxHealth = MaxHealth;
-            pretendent.Health = Health;
+            pretendent.CurrentHealth = CurrentHealth;
             pretendent.Defense = Defense;
             pretendent.Attack = Attack;
             return pretendent;

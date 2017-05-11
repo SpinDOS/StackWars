@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using StackWars.Logger;
-using StackWars.Units;
+using StackWars.Units.Interfaces;
 
-namespace StackWars
+namespace StackWars.UnitFactory
 {
     public sealed class RandomUnitFactory : IUnitFactory
     {
-        Dictionary<IUnit, int> units;
-        Random random = new Random();
+        readonly Dictionary<IUnit, int> _units;
+        readonly Random _random = new Random();
         public RandomUnitFactory()
         {
             Type baseType = typeof(IUnit);
@@ -22,8 +20,7 @@ namespace StackWars
                                     && !type.IsAbstract
                                orderby costAttribute.Cost
                                select new { type, costAttribute.Cost };
-            ILogger logger = null;
-            units = derivedTypes.ToDictionary(pair => Activator.CreateInstance(pair.type, logger) as IUnit, 
+            _units = derivedTypes.ToDictionary(pair => Activator.CreateInstance(pair.type) as IUnit, 
                                                 pair => pair.Cost);
         }
         
@@ -31,11 +28,11 @@ namespace StackWars
         public IUnit GetUnit(ref int maxPossibleCost)
         {
             int argCost = maxPossibleCost;
-            var possibleTypes = units.TakeWhile(pair => pair.Value <= argCost);
-            if (!possibleTypes.Any())
+            var possibleTypes = _units.TakeWhile(pair => pair.Value <= argCost).ToList();
+            if (possibleTypes.Count == 0)
                 return null;
             double sum = possibleTypes.Sum(pair => 1.0 / pair.Value);
-            double randomCost = random.NextDouble() * sum;
+            double randomCost = _random.NextDouble() * sum;
             sum = 0;
             foreach (var pair in possibleTypes)
             {

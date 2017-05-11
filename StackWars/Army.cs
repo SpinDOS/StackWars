@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using StackWars.Units;
+using StackWars.UnitFactory;
+using StackWars.Units.Interfaces;
 
 namespace StackWars
 {
@@ -29,7 +28,7 @@ namespace StackWars
         {
             for (int i = 0; i < Units.Count; i++)
             {
-                if (Units[i].Health <= 0)
+                if (Units[i].CurrentHealth <= 0)
                     Units.RemoveAt(i);
             }
         }

@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using StackWars.Abilities;
-using StackWars.Units;
+using StackWars.UnitFactory;
+using StackWars.Units.Interfaces;
 
 namespace StackWars
 {
-    public class GameEngine
+    public sealed class GameEngine
     {
         static GameEngine _currentGame = null;
         public static GameEngine CurrentGame => _currentGame;
         public static GameEngine StartNewGame(IUnitFactory unitFabric, int armyCost) 
             => _currentGame = new GameEngine(unitFabric, armyCost);
 
-        Random random = new Random();
+        readonly Random _random = new Random();
         private GameEngine(IUnitFactory unitFabric, int armyCost)
         {
             if (unitFabric == null)
@@ -31,38 +29,15 @@ namespace StackWars
         {
             if (GameEnded)
                 return;
-            foreach (var unit in Army1.Units)
-            {
-                IAbilitiable iabilitiable = unit as IAbilitiable;
-                var abilities = iabilitiable?.MakeTurn();
-                if (abilities == null)
-                    continue;
-                foreach (var ability in abilities)
-                    InvokeAbility(ability, iabilitiable, Army1, Army2);
-            }
-            foreach (var unit in Army2.Units)
-            {
-                IAbilitiable iabilitiable = unit as IAbilitiable;
-                var abilities = iabilitiable?.MakeTurn();
-                if (abilities == null)
-                    continue;
-                foreach (var ability in abilities)
-                    InvokeAbility(ability, iabilitiable, Army2, Army1);
-            }
-            MeleeAttack();
-            Army1.CollectDeads();
-            Army2.CollectDeads();
         }
-        private void InvokeAbility(Ability ability, IAbilitiable creator, Army friends, Army enemies)
-        { }
         private void MeleeAttack()
         {
             IUnit left = Army1.Units.First();
             IUnit right = Army2.Units.First();
-            if (left.Health > 0)
-                right.Health -= (100 - right.Defense) * left.Attack / 100;
-            if (right.Health > 0)
-                left.Health -= (100 - left.Defense) * right.Attack / 100;
+            if (left.CurrentHealth > 0)
+                right.CurrentHealth -= (100 - right.Defense) * left.Attack / 100;
+            if (right.CurrentHealth > 0)
+                left.CurrentHealth -= (100 - left.Defense) * right.Attack / 100;
         }
 
     }

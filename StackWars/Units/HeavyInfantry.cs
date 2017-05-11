@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StackWars.Logger;
-using StackWars.Units;
+﻿using StackWars.Logger;
+using StackWars.Units.Interfaces;
 
-namespace StackWars
+namespace StackWars.Units
 {
     [Cost(Cost = 20)]
-    public class HeavyInfantry : SimpleUnit
+    public sealed class HeavyInfantry : SimpleUnit
     {
-        public HeavyInfantry(ILogger logger) : base(logger)
+        public HeavyInfantry()
         {
-            MaxHealth = Health = 140;
+            MaxHealth = CurrentHealth = 140;
             Attack = 25;
             Defense = 45;
         }
 
-        public override IUnit Clone() => base.Clone(new HeavyInfantry(Logger));
+        public override IUnit Clone() => base.Clone(new HeavyInfantry());
     }
 }
