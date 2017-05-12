@@ -1,7 +1,4 @@
 ﻿namespace StackWars.Abilities
 {
-    public class Ability
-    {
-
-    }
+    public abstract class Ability { }
 }

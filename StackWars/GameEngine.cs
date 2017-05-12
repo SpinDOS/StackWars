@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using StackWars.Abilities;
+using StackWars.Commands;
 using StackWars.UnitFactory;
 using StackWars.Units.Interfaces;
 
@@ -18,26 +20,75 @@ namespace StackWars
         {
             if (unitFabric == null)
                 throw new ArgumentNullException(nameof(unitFabric));
-            Army1 = new Army("Army 1", unitFabric, armyCost);
-            Army2 = new Army("Army 2", unitFabric, armyCost);
-            GameEnded = false;
+            CommandsInvoker.Army1 = new Army("Army 1", unitFabric, armyCost);
+            CommandsInvoker.Army2 = new Army("Army 2", unitFabric, armyCost);
         }
-        public bool GameEnded { get; private set; }
-        public Army Army1 { get; }
-        public Army Army2 { get; }
+
+        public bool GameEnded { get; private set; } = false;
+
         public void Turn()
         {
             if (GameEnded)
                 return;
+
+            var commands = GetCommands(CommandsInvoker.Army1, CommandsInvoker.Army2);
+            commands.AddRange(GetCommands(CommandsInvoker.Army2, CommandsInvoker.Army1));
+            CommandsInvoker.AddCommand(commands.OrderBy(a => _random.Next()));
+
+            (Command melee1, Command melee2) = GetMeleeAttacks();
+            CommandsInvoker.AddCommand(melee1);
+            CommandsInvoker.AddCommand(melee2);
+
+            CommandsInvoker.EndTurn();
+            if (CommandsInvoker.Army1.Count == 0 || CommandsInvoker.Army2.Count == 0)
+                GameEnded = true;
         }
-        private void MeleeAttack()
+
+        private List<Command> GetCommands(Army allies, Army enemies)
         {
-            IUnit left = Army1.Units.First();
-            IUnit right = Army2.Units.First();
-            if (left.CurrentHealth > 0)
-                right.CurrentHealth -= (100 - right.Defense) * left.Attack / 100;
-            if (right.CurrentHealth > 0)
-                left.CurrentHealth -= (100 - left.Defense) * right.Attack / 100;
+            var result = new List<Command>();
+            for (int i = 0; i < allies.Count; i++)
+            {
+                foreach (var ability in allies[i].MakeTurn())
+                {
+                    Command command = null;
+                    if (ability is RangeAttack rangeAttack)
+                        command = HandleRangeAttack(allies, enemies, rangeAttack, i);
+
+
+                    if (command != null)
+                        result.Add(command);
+                }
+            }
+            return result;
+        }
+
+        private Command HandleRangeAttack(Army allies, Army enemies, RangeAttack rangeAttack, int sourceIndex)
+        {
+            if (rangeAttack.Range <= sourceIndex)
+                return null;
+            int target = _random.Next(Math.Min(rangeAttack.Range - sourceIndex, enemies.Count));
+            int damage = CountDamageWithDefense(rangeAttack.Attack, enemies[target].Defense);
+            return new DamageCommand(allies, sourceIndex, enemies, target, damage);
+        }
+
+        private (Command melee1, Command melee2) GetMeleeAttacks()
+        {
+            IUnit unit1 = CommandsInvoker.Army1.First(), unit2 = CommandsInvoker.Army2.First();
+            Command command1 = new MeleeDamageCommand(CommandsInvoker.Army1, CommandsInvoker.Army2, 
+                CountDamageWithDefense(unit2.Attack, unit1.Defense));
+            Command command2 = new MeleeDamageCommand(CommandsInvoker.Army2, CommandsInvoker.Army1, 
+                CountDamageWithDefense(unit1.Attack, unit2.Defense));
+            if (_random.Next(2) == 0)
+                return (command1, command2);
+            else
+                return (command2, command1);
+        }
+
+        private static int CountDamageWithDefense(int damage, int defense)
+        {
+            double result = 1.0 * damage * (100 - defense) / 100;
+            return (int) result;
         }
 
     }

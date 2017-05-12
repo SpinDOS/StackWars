@@ -15,9 +15,9 @@ namespace StackWars.Units
         public ArcherUnit()
         {
             MaxHealth = CurrentHealth = 60;
-            Attack = 10;
+            Attack = 15;
             Defense = 1;
-            Range = 8;
+            Range = 10;
             RangeAttack = 15;
         }
         public override IUnit Clone()

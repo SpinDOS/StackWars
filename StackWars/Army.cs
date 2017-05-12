@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using StackWars.Commands;
 using StackWars.UnitFactory;
 using StackWars.Units.Interfaces;
 
 namespace StackWars
 {
-    public sealed class Army
+    public sealed class Army : List<IUnit>
     {
-        public List<IUnit> Units = new List<IUnit>();
         public Army(string name, IUnitFactory fabric, int armyCost)
         {
             if (fabric == null)
@@ -21,26 +21,30 @@ namespace StackWars
                 IUnit unit = fabric.GetUnit(ref armyCost);
                 if (unit == null)
                     break;
-                Units.Add(unit);
-            }
-        }
-        public void CollectDeads()
-        {
-            for (int i = 0; i < Units.Count; i++)
-            {
-                if (Units[i].CurrentHealth <= 0)
-                    Units.RemoveAt(i);
+                this.Add(unit);
             }
         }
         public string Name { get; }
 
+        public CollectDeadCommand CollectDead()
+        {
+            var result = new List<KeyValuePair<int, IUnit>>();
+            for (int i = 0; i < this.Count; i++)
+            {
+                IUnit unit = this[i];
+                if (unit.CurrentHealth <= 0)
+                    result.Add(new KeyValuePair<int, IUnit>(i, unit.Clone()));
+            }
+            return new CollectDeadCommand(this, result);
+        }
+
         public override string ToString()
         {
-            if (Units.Count == 0)
+            if (this.Count == 0)
                 return $"{Name} is empty";
             StringBuilder result = new StringBuilder();
-            result.AppendLine($"{Name}: {Units.Count} units ");
-            foreach (var unit in Units)
+            result.AppendLine($"{Name}: {this.Count} units ");
+            foreach (var unit in this)
                 result.AppendLine(unit.ToString());
             return result.ToString();
         }

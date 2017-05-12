@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StackWars.Commands;
+using StackWars.Logger;
 using StackWars.UnitFactory;
 
 namespace StackWars
@@ -11,8 +13,10 @@ namespace StackWars
     {
         static void Main(string[] args)
         {
+            CommandsInvoker.Logger = new ConsoleLogger();
             var unitFabric = new RandomUnitFactory();
-            GameEngine.StartNewGame(unitFabric, 300);
+            int maxCost = 500;
+            GameEngine.StartNewGame(unitFabric, maxCost);
             while (true)
             {
                 Console.WriteLine("1. Start new game");
@@ -26,7 +30,7 @@ namespace StackWars
                 switch (choice)
                 {
                     case 1:
-                        GameEngine.StartNewGame(unitFabric, 300);
+                        GameEngine.StartNewGame(unitFabric, maxCost);
                         Console.WriteLine("Created!");
                         break;
                     case 2:
@@ -37,8 +41,8 @@ namespace StackWars
                             GameEngine.CurrentGame.Turn();
                         break;
                     case 4:
-                        Console.WriteLine(GameEngine.CurrentGame.Army1);
-                        Console.WriteLine(GameEngine.CurrentGame.Army2);
+                        Console.WriteLine(CommandsInvoker.Army1);
+                        Console.WriteLine(CommandsInvoker.Army2);
                         break;
                     case 5:
                         return;
