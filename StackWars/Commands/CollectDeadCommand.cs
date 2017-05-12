@@ -26,7 +26,7 @@ namespace StackWars.Commands
         public override void Undo(ILogger logger)
         {
             foreach (var pair in Dead)
-                SourceArmy.Insert(pair.Key, pair.Value.Clone());
+                SourceArmy.Insert(pair.Key, pair.Value);
         }
     }
 }

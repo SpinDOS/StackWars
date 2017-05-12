@@ -13,7 +13,7 @@ namespace StackWars.Units
         public virtual int Attack { get; set; }
         public virtual int Defense { get; set; }
         public override string ToString() => 
-            $"{this.GetType().Name}: Health: {CurrentHealth}, Attack: {Attack}, Defense: {Defense}";
+            $"{this.GetType().Name}: HP: {CurrentHealth}, Dmg: {Attack}, Def: {Defense}";
 
         public abstract Unit Clone();
 

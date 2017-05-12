@@ -9,7 +9,7 @@ using StackWars.Units.Interfaces;
 namespace StackWars.Units
 {
     [Cost(Cost = 40)]
-    public sealed class ArcherUnit : RangedUnit
+    public sealed class ArcherUnit : Unit, IRangedUnit
     {
         public ArcherUnit()
         {
@@ -19,6 +19,10 @@ namespace StackWars.Units
             Range = 10;
             RangeAttack = 15;
         }
+
+        public int Range { get; set; }
+        public int RangeAttack { get; set; }
+
         public override Unit Clone()
         {
             var archer = new ArcherUnit

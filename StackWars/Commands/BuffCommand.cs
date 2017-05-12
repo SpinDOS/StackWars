@@ -30,7 +30,7 @@ namespace StackWars.Commands
         {
             Unit unit = TargetArmy[TargetUnitIndex];
             if (backup == null)
-                backup = unit.Clone();
+                backup = unit;
             switch (_type)
             {
             case BuffType.Armor:
@@ -49,7 +49,7 @@ namespace StackWars.Commands
             TargetArmy[TargetUnitIndex] = unit;
         }
 
-        public override void Undo(ILogger logger) { TargetArmy[TargetUnitIndex] = backup.Clone(); }
+        public override void Undo(ILogger logger) { TargetArmy[TargetUnitIndex] = backup; }
 
     }
 }

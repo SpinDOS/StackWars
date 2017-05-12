@@ -10,25 +10,43 @@ namespace StackWars.Commands
 {
     public sealed class RemoveRandomBuffCommand : SingleTargetCommand
     {
-        public RemoveRandomBuffCommand(Army source, int sourceIndex, Army target, int targetIndex)
-            : base(source, sourceIndex, target, targetIndex) { }
+        public RemoveRandomBuffCommand(Army source, int sourceIndex, Army target, int targetIndex, int buffNumber)
+            : base(source, sourceIndex, target, targetIndex)
+        {
+            BuffNumber = buffNumber;
+        }
 
-        private Unit backup = null;
-        private Unit newUnit = null;
+        private BuffUnit backup = null;
+
+        public int BuffNumber { get; }
 
         public override void Execute(ILogger logger)
         {
-            if (backup == null)
+            Unit unit = TargetArmy[TargetUnitIndex];
+            if (BuffNumber == 0)
             {
-                backup = TargetArmy[TargetUnitIndex].Clone();
-                newUnit = BuffUnit.RemoveRandomBuff(backup as BuffUnit);
+                backup = unit as BuffUnit;
+                TargetArmy[TargetUnitIndex] = backup.BaseUnit;
+                return;
             }
-            TargetArmy[TargetUnitIndex] = newUnit.Clone();
+            for (int i = 0; i < BuffNumber - 1; i++)
+                unit = (unit as BuffUnit).BaseUnit;
+            BuffUnit buffUnit = unit as BuffUnit;
+            backup = buffUnit.BaseUnit as BuffUnit;
+            buffUnit.BaseUnit = backup.BaseUnit;
         }
 
         public override void Undo(ILogger logger)
         {
-            TargetArmy[TargetUnitIndex] = backup.Clone();
+            if (BuffNumber == 0)
+            {
+                TargetArmy[TargetUnitIndex] = backup;
+                return;
+            }
+            BuffUnit buffUnit = TargetArmy[TargetUnitIndex] as BuffUnit;
+            for (int i = 0; i < BuffNumber - 1; i++)
+                buffUnit = buffUnit.BaseUnit as BuffUnit;
+            buffUnit.BaseUnit = backup;
         }
     }
 }

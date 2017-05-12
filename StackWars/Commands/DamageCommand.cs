@@ -18,8 +18,8 @@ namespace StackWars.Commands
         public int Damage { get; }
         public override void Execute(ILogger logger)
         {
-            logger?.Log($"{SourceArmy.Name}'s unit {SourceUnitIndex} attacks " +
-                        $"{TargetArmy.Name}'s unit {TargetUnitIndex} with {Damage} damage");
+            logger?.Log($"{SourceArmy[SourceUnitIndex.Value]} ({SourceArmy.Name}) attacks " +
+                        $"{TargetArmy[TargetUnitIndex]} ({TargetArmy.Name}) with {Damage} damage");
             TargetArmy[TargetUnitIndex].CurrentHealth -= Damage;
         }
 

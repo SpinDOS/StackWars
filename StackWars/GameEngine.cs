@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using StackWars.Commands;
@@ -11,6 +12,7 @@ namespace StackWars
     public sealed class GameEngine
     {
         private static double _heavyInfantryBuffChance = 0.2;
+        private static double _healChance = 0.3;
 
         static GameEngine _currentGame = null;
         public static GameEngine CurrentGame => _currentGame;
@@ -44,10 +46,12 @@ namespace StackWars
             {
                 DamageCommand cmd = commands[i] as DamageCommand;
                 if (cmd?.Damage > 10 &&
-                    cmd.TargetArmy[cmd.TargetUnitIndex] is BuffUnit)
+                    cmd.TargetArmy[cmd.TargetUnitIndex] is BuffUnit buffUnit)
                 {
+                    int buffNumber = _random.Next(buffUnit.BuffCount);
                     commands.Insert(i + 1, new RemoveRandomBuffCommand(cmd.SourceArmy, cmd.SourceUnitIndex ?? -1, 
-                                                                        cmd.TargetArmy, cmd.TargetUnitIndex));
+                                                                        cmd.TargetArmy, cmd.TargetUnitIndex, 
+                                                                        buffNumber));
                 }
 
             }
@@ -69,6 +73,9 @@ namespace StackWars
                     HandleRangeAttack(allies, enemies, i, result);
                 if (unit is LigthInfantry)
                     HandleHeavyInfantryBuff(allies, i, result);
+                if (unit is IHealer)
+                    HandleHealer(allies, i, result);
+
             }
             return result;
         }
@@ -88,18 +95,49 @@ namespace StackWars
 
         private void HandleHeavyInfantryBuff(Army allies, int unitIndex, List<Command> list)
         {
-            int target = -1;
-            if (unitIndex != 0 && IsBuffable(allies[unitIndex - 1]))
-                target = unitIndex - 1;
-            if (_random.Next(2) == 0 && unitIndex != allies.Count - 1 && IsBuffable(allies[unitIndex + 1]))
-                target = unitIndex + 1;
-            if (target == -1 || _random.NextDouble() > _heavyInfantryBuffChance)
+            if (_random.NextDouble() > _heavyInfantryBuffChance)
+                return;
+            int target = FindUnitInRange(allies, unitIndex, 1, IsBuffable);
+            if (target == -1)
                 return;
 
             BuffType[] buffTypes = Enum.GetValues(typeof(BuffType)) as BuffType[];
             BuffType buffType = buffTypes[_random.Next(buffTypes.Length)];
 
             list.Add(new BuffCommand(allies, unitIndex, allies, target, buffType));
+        }
+
+        bool IsHealable(Unit unit) => true;
+
+        private void HandleHealer(Army allies, int unitIndex, List<Command> list)
+        {
+            if (_random.NextDouble() > _healChance)
+                return;
+            IHealer healer = allies[unitIndex] as IHealer;
+            int target = FindUnitInRange(allies, unitIndex, healer.Range, IsHealable);
+            if (target >= 0)
+                list.Add(new HealCommand(allies, unitIndex, allies, target, healer.Heal));
+        }
+
+        private int FindUnitInRange(Army army, int mid, int range, Func<Unit, bool> selector)
+        {
+            if (army.Count == 0)
+                return -1;
+            int start = Math.Max(0, mid - range), end = Math.Min(army.Count - 1, mid + range);
+            if (end < 0)
+                end = army.Count - 1; // fix overflow error
+            int rand = _random.Next(start, end);
+            for (int i = rand; i <= end; i++)
+            {
+                if (selector(army[i]))
+                    return i;
+            }
+            for (int i = 0; i < rand; i++)
+            {
+                if (selector(army[i]))
+                    return i;
+            }
+            return -1;
         }
 
         private (Command melee1, Command melee2) GetMeleeAttacks()

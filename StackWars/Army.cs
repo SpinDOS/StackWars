@@ -34,7 +34,7 @@ namespace StackWars
             {
                 Unit unit = this[i];
                 if (unit.CurrentHealth <= 0)
-                    result.Add(new KeyValuePair<int, Unit>(i, unit.Clone()));
+                    result.Add(new KeyValuePair<int, Unit>(i, unit));
             }
             return new CollectDeadCommand(this, result);
         }
