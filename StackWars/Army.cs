@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using StackWars.Commands;
 using StackWars.UnitFactory;
+using StackWars.Units;
 using StackWars.Units.Interfaces;
 
 namespace StackWars
 {
-    public sealed class Army : List<IUnit>
+    public sealed class Army : List<Unit>
     {
-        public Army(string name, IUnitFactory fabric, int armyCost)
+        public Army(string name, UnitFactory.UnitFactory fabric, int armyCost)
         {
             if (fabric == null)
                 throw new ArgumentNullException(nameof(fabric));
@@ -18,7 +19,7 @@ namespace StackWars
             Name = name;
             while (armyCost > 0)
             {
-                IUnit unit = fabric.GetUnit(ref armyCost);
+                Unit unit = fabric.GetUnit(ref armyCost);
                 if (unit == null)
                     break;
                 this.Add(unit);
@@ -28,12 +29,12 @@ namespace StackWars
 
         public CollectDeadCommand CollectDead()
         {
-            var result = new List<KeyValuePair<int, IUnit>>();
+            var result = new List<KeyValuePair<int, Unit>>();
             for (int i = 0; i < this.Count; i++)
             {
-                IUnit unit = this[i];
+                Unit unit = this[i];
                 if (unit.CurrentHealth <= 0)
-                    result.Add(new KeyValuePair<int, IUnit>(i, unit.Clone()));
+                    result.Add(new KeyValuePair<int, Unit>(i, unit.Clone()));
             }
             return new CollectDeadCommand(this, result);
         }

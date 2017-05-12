@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using StackWars.Logger;
-using StackWars.Units.Interfaces;
+using StackWars.Units;
 
 namespace StackWars.UnitFactory
 {
-    public sealed class RandomUnitFactory : IUnitFactory
+    public sealed class RandomUnitFactory : UnitFactory
     {
-        readonly Dictionary<IUnit, int> _units;
+        readonly Dictionary<Unit, int> _units;
         readonly Random _random = new Random();
         public RandomUnitFactory()
         {
-            Type baseType = typeof(IUnit);
+            Type baseType = typeof(Unit);
             var derivedTypes = from assembly in AppDomain.CurrentDomain.GetAssemblies()
                                from type in assembly.GetTypes()
                                let costAttribute = Attribute.GetCustomAttribute(type, typeof(CostAttribute)) as CostAttribute
@@ -20,12 +20,12 @@ namespace StackWars.UnitFactory
                                     && !type.IsAbstract
                                orderby costAttribute.Cost
                                select new { type, costAttribute.Cost };
-            _units = derivedTypes.ToDictionary(pair => Activator.CreateInstance(pair.type) as IUnit, 
+            _units = derivedTypes.ToDictionary(pair => Activator.CreateInstance(pair.type) as Unit, 
                                                 pair => pair.Cost);
         }
         
 
-        public IUnit GetUnit(ref int maxPossibleCost)
+        public Unit GetUnit(ref int maxPossibleCost)
         {
             int argCost = maxPossibleCost;
             var possibleTypes = _units.TakeWhile(pair => pair.Value <= argCost).ToList();
@@ -46,7 +46,7 @@ namespace StackWars.UnitFactory
                 maxPossibleCost -= pair.Value;
                 return pair.Key.Clone();
             }
-            KeyValuePair<IUnit, int> last = possibleTypes.Last();
+            KeyValuePair<Unit, int> last = possibleTypes.Last();
             maxPossibleCost -= last.Value;
             return last.Key.Clone();
         }

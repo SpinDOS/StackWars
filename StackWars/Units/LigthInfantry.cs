@@ -1,9 +1,12 @@
-﻿using StackWars.Units.Interfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using StackWars.Units.Interfaces;
 
 namespace StackWars.Units
 {
     [Cost(Cost = 10)]
-    public sealed class LigthInfantry : SimpleUnit
+    public sealed class LigthInfantry : Unit
     {
         public LigthInfantry()
         {
@@ -12,6 +15,6 @@ namespace StackWars.Units
             Defense = 15;
         }
 
-        public override IUnit Clone() => base.Clone(new LigthInfantry());
+        public override Unit Clone() => base.Clone(new LigthInfantry());
     }
 }

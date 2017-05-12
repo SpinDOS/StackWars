@@ -9,10 +9,10 @@ namespace StackWars.Commands
 {
     public abstract class Command
     {
-        protected Command(Army source, int? sourceUnitUnit)
+        protected Command(Army source, int? sourceUnitIndex)
         {
             SourceArmy = source;
-            SourceUnitIndex = sourceUnitUnit;
+            SourceUnitIndex = sourceUnitIndex;
         }
         public Army SourceArmy { get; }
         public int? SourceUnitIndex { get; }

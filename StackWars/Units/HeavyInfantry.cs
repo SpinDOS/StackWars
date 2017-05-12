@@ -4,7 +4,7 @@ using StackWars.Units.Interfaces;
 namespace StackWars.Units
 {
     [Cost(Cost = 20)]
-    public sealed class HeavyInfantry : SimpleUnit
+    public sealed class HeavyInfantry : Unit
     {
         public HeavyInfantry()
         {
@@ -13,6 +13,6 @@ namespace StackWars.Units
             Defense = 45;
         }
 
-        public override IUnit Clone() => base.Clone(new HeavyInfantry());
+        public override Unit Clone() => base.Clone(new HeavyInfantry());
     }
 }

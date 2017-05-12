@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StackWars.Logger;
-using StackWars.Abilities;
 using StackWars.Units.Interfaces;
 
 namespace StackWars.Units
@@ -20,7 +19,7 @@ namespace StackWars.Units
             Range = 10;
             RangeAttack = 15;
         }
-        public override IUnit Clone()
+        public override Unit Clone()
         {
             var archer = new ArcherUnit
             {
