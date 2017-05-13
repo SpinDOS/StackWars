@@ -12,42 +12,41 @@ namespace StackWars.Commands
     public sealed class RemoveBuffCommand : SingleTargetCommand
     {
         public RemoveBuffCommand(Army source, int? sourceIndex, Army target, int targetIndex, int buffNumber)
-            : base(source, sourceIndex, target, targetIndex)
-        {
-            BuffNumber = buffNumber;
-        }
-
-        private BuffUnit backup = null;
+            : base(source, sourceIndex, target, targetIndex) => BuffNumber = buffNumber;
 
         public int BuffNumber { get; }
+
+        private BuffedUnit _backup = null;
 
         public override void Execute(ILogger logger)
         {
             Unit unit = TargetArmy[TargetUnitIndex];
             if (BuffNumber == 0)
             {
-                backup = unit as BuffUnit;
-                TargetArmy[TargetUnitIndex] = backup.BaseUnit;
+                _backup = unit as BuffedUnit;
+                TargetArmy[TargetUnitIndex] = _backup.BaseUnit;
                 return;
             }
             for (int i = 0; i < BuffNumber - 1; i++)
-                unit = (unit as BuffUnit).BaseUnit;
-            BuffUnit buffUnit = unit as BuffUnit;
-            backup = buffUnit.BaseUnit as BuffUnit;
-            buffUnit.BaseUnit = backup.BaseUnit;
+                unit = (unit as BuffedUnit).BaseUnit;
+            BuffedUnit buffedUnit = unit as BuffedUnit;
+            _backup = buffedUnit.BaseUnit as BuffedUnit;
+            buffedUnit.BaseUnit = _backup.BaseUnit;
         }
 
         public override void Undo(ILogger logger)
         {
             if (BuffNumber == 0)
             {
-                TargetArmy[TargetUnitIndex] = backup;
+                TargetArmy[TargetUnitIndex] = _backup;
+                _backup = null;
                 return;
             }
-            BuffUnit buffUnit = TargetArmy[TargetUnitIndex] as BuffUnit;
+            BuffedUnit buffedUnit = TargetArmy[TargetUnitIndex] as BuffedUnit;
             for (int i = 0; i < BuffNumber - 1; i++)
-                buffUnit = buffUnit.BaseUnit as BuffUnit;
-            buffUnit.BaseUnit = backup;
+                buffedUnit = buffedUnit.BaseUnit as BuffedUnit;
+            buffedUnit.BaseUnit = _backup;
+            _backup = null;
         }
     }
 }

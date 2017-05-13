@@ -1,10 +1,11 @@
-﻿using StackWars.Logger;
+﻿using StackWars.Commands;
+using StackWars.Logger;
 using StackWars.Units.Interfaces;
 
 namespace StackWars.Units
 {
     [Cost(Cost = 20)]
-    public sealed class HeavyInfantry : Unit
+    public sealed class HeavyInfantry : Unit, IBuffableUnit
     {
         public HeavyInfantry()
         {
@@ -12,6 +13,7 @@ namespace StackWars.Units
             Attack = 25;
             Defense = 45;
         }
-        
+
+        public bool CanBeBuffed(BuffType type) => true;
     }
 }

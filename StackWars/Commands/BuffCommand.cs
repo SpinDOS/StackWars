@@ -9,45 +9,35 @@ using StackWars.Units.Interfaces;
 
 namespace StackWars.Commands
 {
-    public enum BuffType
-    {
-        Horse,
-        Armor,
-        Helmet,
-        Rapier,
-    }
     public class BuffCommand : SingleTargetCommand
     {
         private readonly BuffType _type;
         public BuffCommand(Army source, int sourceIndex, Army target, int targetIndex, BuffType type)
-            : base(source, sourceIndex, target, targetIndex)
-        {
-            _type = type;
-        }
+            : base(source, sourceIndex, target, targetIndex) => _type = type;
 
         public override void Execute(ILogger logger)
         {
-            Unit unit = TargetArmy[TargetUnitIndex];
+            IBuffableUnit unit = TargetArmy[TargetUnitIndex] as IBuffableUnit;
             switch (_type)
             {
             case BuffType.Armor:
-                unit = new ArmorBuffUnit(unit);
+                unit = new ArmorBuffedUnit(unit);
                 break;
             case BuffType.Helmet:
-                unit = new HelmetBuffUnit(unit);
+                unit = new HelmetBuffedUnit(unit);
                 break;
             case BuffType.Horse:
-                unit = new HorseBuffUnit(unit);
+                unit = new HorseBuffedUnit(unit);
                 break;
             case BuffType.Rapier:
-                unit = new RapierBuffUnit(unit);
+                unit = new RapierBuffedUnit(unit);
                 break;
             }
-            TargetArmy[TargetUnitIndex] = unit;
+            TargetArmy[TargetUnitIndex] = unit as Unit;
         }
 
         public override void Undo(ILogger logger)
-            { TargetArmy[TargetUnitIndex] = (TargetArmy[TargetUnitIndex] as BuffUnit).BaseUnit; }
+            => TargetArmy[TargetUnitIndex] = (TargetArmy[TargetUnitIndex] as BuffedUnit).BaseUnit;
 
     }
 }

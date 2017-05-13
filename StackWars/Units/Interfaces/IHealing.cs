@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace StackWars.Units.Interfaces
 {
-    interface IHealer
+    public interface IHealerUnit
     {
         int HealRange { get; set; }
         int Heal { get; set; }
+    }
+
+    public interface IHealableUnit
+    {
+        
     }
 }

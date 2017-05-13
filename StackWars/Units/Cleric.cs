@@ -9,7 +9,7 @@ using StackWars.Units.Interfaces;
 namespace StackWars.Units
 {
     [Cost(Cost = 30)]
-    public sealed class Cleric : Unit, IRangedUnit, IHealer, IObservableUnit
+    public sealed class Cleric : Unit, IRangedUnit, IHealerUnit, IObservableUnit
     {
         public Cleric()
         {

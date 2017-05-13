@@ -7,7 +7,7 @@ using StackWars.Units.Interfaces;
 namespace StackWars.Units
 {
     [Cost(Cost = 10)]
-    public sealed class LightInfantry : Unit, IClonableUnit
+    public sealed class LightInfantry : Unit, IClonableUnit, IHealableUnit, IBufferUnit
     {
         public LightInfantry()
         {

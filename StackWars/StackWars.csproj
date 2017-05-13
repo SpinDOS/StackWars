@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GulyayGorod">
+      <HintPath>..\GulyayGorod.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -62,14 +65,14 @@
     <Compile Include="Army.cs" />
     <Compile Include="CostAttribute.cs" />
     <Compile Include="GameEngine.cs" />
+    <Compile Include="Units\GulyayGorodUnit.cs" />
     <Compile Include="Units\HeavyInfantryBuffUnits.cs" />
-    <Compile Include="Units\Interfaces\BuffUnit.cs" />
+    <Compile Include="Units\Interfaces\BuffedUnit.cs" />
     <Compile Include="Units\Cleric.cs" />
-    <Compile Include="Units\Cloner.cs" />
-    <Compile Include="Units\Interfaces\IClonableUnit.cs" />
+    <Compile Include="Units\ClonerUnit.cs" />
     <Compile Include="Units\Interfaces\IClonerUnit.cs" />
     <Compile Include="Units\HeavyInfantry.cs" />
-    <Compile Include="Units\Interfaces\IHealer.cs" />
+    <Compile Include="Units\Interfaces\IHealing.cs" />
     <Compile Include="Units\Interfaces\IRangedUnit.cs" />
     <Compile Include="UnitFactory\UnitCreator.cs" />
     <Compile Include="Units\Interfaces\IUnitObserving.cs" />
@@ -77,8 +80,7 @@
     <Compile Include="Units\LightInfantry.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Units\ProxyUnit.cs" />
-    <Compile Include="Units\Interfaces\SingleAppliedBuffUnit.cs" />
+    <Compile Include="Units\ProxyClonerUnit.cs" />
     <Compile Include="Units\Interfaces\Unit.cs" />
     <Compile Include="UnitFactory\RandomUnitFactory.cs" />
   </ItemGroup>

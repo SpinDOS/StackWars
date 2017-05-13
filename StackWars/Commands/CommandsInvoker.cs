@@ -32,14 +32,11 @@ namespace StackWars.Commands
         {
             if (UndoStack.Count == 0)
                 return;
-            RedoStack.Push(UndoStack.Pop());
-            while (UndoStack.Count > 0)
+            RedoStack.Push(UndoStack.Pop()); // move 'null'
+            while (UndoStack.Count > 0 && UndoStack.Peek() != null)
             {
                 Command command = UndoStack.Pop();
-                if (command != null)
-                    command.Undo(Logger);
-                else
-                    break;
+                command.Undo(Logger);
                 RedoStack.Push(command);
             }
         }
@@ -50,7 +47,7 @@ namespace StackWars.Commands
                 Command command = RedoStack.Pop();
                 UndoStack.Push(command);
                 if (command != null)
-                    command.Execute(null);
+                    command.Execute(Logger);
                 else
                     break;
             }
