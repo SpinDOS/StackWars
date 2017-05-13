@@ -9,9 +9,9 @@ using StackWars.Units.Interfaces;
 
 namespace StackWars.Commands
 {
-    public sealed class RemoveRandomBuffCommand : SingleTargetCommand
+    public sealed class RemoveBuffCommand : SingleTargetCommand
     {
-        public RemoveRandomBuffCommand(Army source, int sourceIndex, Army target, int targetIndex, int buffNumber)
+        public RemoveBuffCommand(Army source, int? sourceIndex, Army target, int targetIndex, int buffNumber)
             : base(source, sourceIndex, target, targetIndex)
         {
             BuffNumber = buffNumber;

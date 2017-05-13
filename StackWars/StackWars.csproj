@@ -52,8 +52,7 @@
     <Compile Include="Commands\DamageCommand.cs" />
     <Compile Include="Commands\BuffCommand.cs" />
     <Compile Include="Commands\HealCommand.cs" />
-    <Compile Include="Commands\MeleeDamageCommand.cs" />
-    <Compile Include="Commands\RemoveRandomBuffCommand.cs" />
+    <Compile Include="Commands\RemoveBuffCommand.cs" />
     <Compile Include="Commands\SingleTargetCommand.cs" />
     <Compile Include="Logger\ConsoleLogger.cs" />
     <Compile Include="Logger\FileLogger.cs" />
@@ -67,6 +66,7 @@
     <Compile Include="Units\Interfaces\BuffUnit.cs" />
     <Compile Include="Units\Cleric.cs" />
     <Compile Include="Units\Cloner.cs" />
+    <Compile Include="Units\Interfaces\IClonableUnit.cs" />
     <Compile Include="Units\Interfaces\IClonerUnit.cs" />
     <Compile Include="Units\HeavyInfantry.cs" />
     <Compile Include="Units\Interfaces\IHealer.cs" />
@@ -74,7 +74,7 @@
     <Compile Include="UnitFactory\UnitCreator.cs" />
     <Compile Include="Units\Interfaces\IUnitObserving.cs" />
     <Compile Include="Units\Interfaces\WrapperUnit.cs" />
-    <Compile Include="Units\LigthInfantry.cs" />
+    <Compile Include="Units\LightInfantry.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Units\ProxyUnit.cs" />

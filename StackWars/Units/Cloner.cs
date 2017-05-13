@@ -17,25 +17,11 @@ namespace StackWars.Units
             Defense = 15;
             MaxHealth = CurrentHealth = 30;
         }
-        public override Unit Clone()
-        {
-            Cloner cloner = new Cloner();
-            cloner.RangeAttack = this.RangeAttack;
-            cloner.Range = this.Range;
-            cloner.CloneRange = this.Range;
-            return base.Clone(cloner);
-        }
 
         public int Range { get; set; } = 3;
 
         public int RangeAttack { get; set; } = 5;
 
         public int CloneRange { get; set; } = int.MaxValue;
-        public override bool CanBeAffectedBy(Type typeOfAbility)
-        {
-            if (typeOfAbility == typeof(BuffCommand) || typeOfAbility == typeof(CloneCommand))
-                return false;
-            return base.CanBeAffectedBy(typeOfAbility);
-        }
     }
 }

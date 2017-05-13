@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StackWars.Logger;
 using StackWars.Units;
+using StackWars.Units.Interfaces;
 
 namespace StackWars.Commands
 {
@@ -24,13 +25,9 @@ namespace StackWars.Commands
             _type = type;
         }
 
-        private Unit backup = null;
-
         public override void Execute(ILogger logger)
         {
             Unit unit = TargetArmy[TargetUnitIndex];
-            if (backup == null)
-                backup = unit;
             switch (_type)
             {
             case BuffType.Armor:
@@ -49,7 +46,8 @@ namespace StackWars.Commands
             TargetArmy[TargetUnitIndex] = unit;
         }
 
-        public override void Undo(ILogger logger) { TargetArmy[TargetUnitIndex] = backup; }
+        public override void Undo(ILogger logger)
+            { TargetArmy[TargetUnitIndex] = (TargetArmy[TargetUnitIndex] as BuffUnit).BaseUnit; }
 
     }
 }

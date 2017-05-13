@@ -23,7 +23,5 @@ namespace StackWars.Units
                 BaseUnit.CurrentHealth = value;
             }
         }
-
-        public override Unit Clone() => new ProxyUnit(BaseUnit.Clone(), Logger);
     }
 }

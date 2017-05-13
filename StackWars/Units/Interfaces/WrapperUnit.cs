@@ -31,14 +31,6 @@ namespace StackWars.Units.Interfaces
         }
 
         public Unit BaseUnit { get; set; }
-
-        protected Unit Clone(BuffUnit pretendent)
-        {
-            pretendent.BaseUnit = BaseUnit.Clone();
-            return pretendent;
-        }
-
-        public override bool CanBeAffectedBy(Type typeOfAbility) => BaseUnit.CanBeAffectedBy(typeOfAbility);
         public override string ToString() => BaseUnit.ToString();
     }
 }

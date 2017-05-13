@@ -10,7 +10,7 @@ namespace StackWars.Commands
 {
     public class DamageCommand : SingleTargetCommand
     {
-        public DamageCommand(Army source, int sourceIndex, Army target, int targetIndex, int damage)
+        public DamageCommand(Army source, int? sourceIndex, Army target, int targetIndex, int damage)
             : base(source, sourceIndex, target, targetIndex)
         {
             Damage = damage;
@@ -18,7 +18,11 @@ namespace StackWars.Commands
         public int Damage { get; }
         public override void Execute(ILogger logger)
         {
-            logger?.Log($"{SourceArmy[SourceUnitIndex.Value]} ({SourceArmy.Name}) attacks " +
+            var attacker = SourceUnitIndex.HasValue? 
+                $"{SourceArmy[SourceUnitIndex.Value]} ({SourceArmy.Name})"
+                : SourceArmy.Name;
+
+            logger?.Log($"{attacker} attacks " +
                         $"{TargetArmy[TargetUnitIndex]} ({TargetArmy.Name}) with {Damage} damage");
             TargetArmy[TargetUnitIndex].CurrentHealth -= Damage;
         }

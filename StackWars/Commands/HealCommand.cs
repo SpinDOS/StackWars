@@ -17,15 +17,11 @@ namespace StackWars.Commands
         }
         public int Heal { get; set; }
 
-        private int backup_health;
-
         public override void Execute(ILogger logger)
         {
-            Unit unit = TargetArmy[TargetUnitIndex];
-            backup_health = unit.CurrentHealth;
-            unit.CurrentHealth = Math.Min(unit.CurrentHealth + Heal, unit.MaxHealth);
+            TargetArmy[TargetUnitIndex].CurrentHealth += Heal;
         }
 
-        public override void Undo(ILogger logger) { TargetArmy[TargetUnitIndex].CurrentHealth = backup_health; }
+        public override void Undo(ILogger logger) { TargetArmy[TargetUnitIndex].CurrentHealth -= Heal; }
     }
 }

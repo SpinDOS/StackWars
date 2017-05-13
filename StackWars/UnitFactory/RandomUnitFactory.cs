@@ -8,20 +8,19 @@ namespace StackWars.UnitFactory
 {
     public sealed class RandomUnitFactory : UnitFactory
     {
-        readonly Dictionary<Unit, int> _units;
+        readonly Dictionary<Type, int> _units;
         readonly Random _random = new Random();
         public RandomUnitFactory()
         {
             Type baseType = typeof(Unit);
-            var derivedTypes = from assembly in AppDomain.CurrentDomain.GetAssemblies()
-                               from type in assembly.GetTypes()
-                               let costAttribute = Attribute.GetCustomAttribute(type, typeof(CostAttribute)) as CostAttribute
-                               where costAttribute != null && baseType.IsAssignableFrom(type) 
-                                    && !type.IsAbstract
-                               orderby costAttribute.Cost
-                               select new { type, costAttribute.Cost };
-            _units = derivedTypes.ToDictionary(pair => Activator.CreateInstance(pair.type) as Unit, 
-                                                pair => pair.Cost);
+            _units = (from assembly in AppDomain.CurrentDomain.GetAssemblies()
+                from type in assembly.GetTypes()
+                let costAttribute = Attribute.GetCustomAttribute(type, typeof(CostAttribute)) as CostAttribute
+                where costAttribute != null && baseType.IsAssignableFrom(type) 
+                && !type.IsAbstract
+                orderby costAttribute.Cost
+                select new KeyValuePair<Type, int>(type, costAttribute.Cost)
+            ).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
         
 
@@ -33,7 +32,7 @@ namespace StackWars.UnitFactory
                 return null;
             var selectedPair = possibleTypes[_random.Next(possibleTypes.Count)];
             maxPossibleCost -= selectedPair.Value;
-            return selectedPair.Key.Clone();
+            return Activator.CreateInstance(selectedPair.Key) as Unit;
 //
 //            double randomCost = _random.Next(100);
 //

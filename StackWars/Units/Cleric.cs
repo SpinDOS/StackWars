@@ -18,18 +18,6 @@ namespace StackWars.Units
             MaxHealth = CurrentHealth = 1;
         }
 
-        public override Unit Clone()
-        {
-            Cleric cleric = new Cleric();
-            cleric.Heal = this.Heal;
-            cleric.RangeAttack = this.RangeAttack;
-            cleric.Range = this.Range;
-            cleric.HealRange = this.HealRange;
-            foreach (var observer in _observers)
-                cleric.AddObserver(observer);
-            return base.Clone(cleric);
-        }
-
         public int HealRange { get; set; } = int.MaxValue;
 
         public int Heal { get; set; } = 10;
@@ -37,12 +25,6 @@ namespace StackWars.Units
         public int Range { get; set; } = 5;
 
         public int RangeAttack { get; set; } = 10;
-        public override bool CanBeAffectedBy(Type typeOfAbility)
-        {
-            if (typeOfAbility == typeof(BuffCommand))
-                return false;
-            return base.CanBeAffectedBy(typeOfAbility);
-        }
 
         private readonly List<IUnitObserver> _observers = new List<IUnitObserver>();
 

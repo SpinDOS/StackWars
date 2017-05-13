@@ -12,7 +12,6 @@ namespace StackWars.Units
             Attack = 25;
             Defense = 45;
         }
-
-        public override Unit Clone() => base.Clone(new HeavyInfantry());
+        
     }
 }

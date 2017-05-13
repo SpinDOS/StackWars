@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StackWars.Logger;
+using StackWars.Units.Interfaces;
 
 namespace StackWars.Commands
 {
@@ -17,7 +18,7 @@ namespace StackWars.Commands
         public int InsertPosition { get; }
         public override void Execute(ILogger logger)
         {
-            TargetArmy.Insert(InsertPosition, TargetArmy[TargetUnitIndex].Clone());
+            TargetArmy.Insert(InsertPosition, (TargetArmy[TargetUnitIndex] as IClonableUnit).Clone());
         }
 
         public override void Undo(ILogger logger)

@@ -15,18 +15,5 @@ namespace StackWars.Units
         public virtual int Defense { get; set; }
         public override string ToString() => 
             $"{this.GetType().Name}: HP: {CurrentHealth}, Dmg: {Attack}, Def: {Defense}";
-
-        public abstract Unit Clone();
-
-        protected virtual Unit Clone(Unit pretendent)
-        {
-            pretendent.MaxHealth = MaxHealth;
-            pretendent.CurrentHealth = CurrentHealth;
-            pretendent.Defense = Defense;
-            pretendent.Attack = Attack;
-            return pretendent;
-        }
-
-        public virtual bool CanBeAffectedBy(Type typeOfAbility) => true;
     }
 }

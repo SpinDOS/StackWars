@@ -8,7 +8,7 @@ namespace StackWars.Commands
 {
     public abstract class SingleTargetCommand : Command
     {
-        protected SingleTargetCommand(Army source, int sourceIndex, Army target, int targetIndex)
+        protected SingleTargetCommand(Army source, int? sourceIndex, Army target, int targetIndex)
             : base(source, sourceIndex)
         {
             TargetArmy = target;

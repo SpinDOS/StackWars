@@ -10,7 +10,7 @@ using StackWars.Units.Interfaces;
 namespace StackWars.Units
 {
     [Cost(Cost = 40)]
-    public sealed class ArcherUnit : Unit, IRangedUnit
+    public sealed class ArcherUnit : Unit, IRangedUnit, IClonableUnit
     {
         public ArcherUnit()
         {
@@ -24,20 +24,16 @@ namespace StackWars.Units
         public int Range { get; set; }
         public int RangeAttack { get; set; }
 
-        public override Unit Clone()
+        public Unit Clone()
         {
-            var archer = new ArcherUnit
-            {
-                Range = this.Range,
-                RangeAttack = this.Range
-            };
-            return base.Clone(archer);
-        }
-        public override bool CanBeAffectedBy(Type typeOfAbility)
-        {
-            if (typeOfAbility == typeof(BuffCommand))
-                return false;
-            return base.CanBeAffectedBy(typeOfAbility);
+            var clone = new ArcherUnit();
+            clone.Attack = this.Attack;
+            clone.CurrentHealth = this.CurrentHealth;
+            clone.MaxHealth = this.MaxHealth;
+            clone.Defense = this.Defense;
+            clone.RangeAttack = this.RangeAttack;
+            clone.Range = this.Range;
+            return clone;
         }
     }
 }

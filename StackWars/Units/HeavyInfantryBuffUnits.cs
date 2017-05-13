@@ -12,7 +12,6 @@ namespace StackWars.Units
     {
         public HorseBuffUnit(Unit baseUnit) : base(baseUnit) { }
         public override int Attack => BaseUnit.Attack + 10;
-        public override Unit Clone() => base.Clone(new HorseBuffUnit(BaseUnit));
         public override string ToString() => base.ToString() + " (with horse)";
     }
 
@@ -20,7 +19,6 @@ namespace StackWars.Units
     {
         public ArmorBuffUnit(Unit baseUnit) : base(baseUnit) { }
         public override int Defense => BaseUnit.Defense + 10;
-        public override Unit Clone() => base.Clone(new ArmorBuffUnit(BaseUnit));
         public override string ToString() => base.ToString() + " (with armor)";
     }
 
@@ -28,7 +26,6 @@ namespace StackWars.Units
     {
         public HelmetBuffUnit(Unit baseUnit) : base(baseUnit) { }
         public override int Defense => BaseUnit.Defense + 5;
-        public override Unit Clone() => base.Clone(new HelmetBuffUnit(BaseUnit));
         public override string ToString() => base.ToString() + " (with helmet)";
     }
 
@@ -36,7 +33,6 @@ namespace StackWars.Units
     {
         public RapierBuffUnit(Unit baseUnit) : base(baseUnit) { }
         public override int Attack => BaseUnit.Attack + 20;
-        public override Unit Clone() => base.Clone(new RapierBuffUnit(BaseUnit));
         public override string ToString() => base.ToString() + " (with rapier)";
     }
 }
