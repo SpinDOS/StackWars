@@ -23,16 +23,16 @@ namespace StackWars.Units
             Cleric cleric = new Cleric();
             cleric.Heal = this.Heal;
             cleric.RangeAttack = this.RangeAttack;
-            (cleric as IRangedUnit).Range = (this as IRangedUnit).Range;
-            (cleric as IHealer).Range = (this as IHealer).Range;
+            cleric.Range = this.Range;
+            cleric.HealRange = this.HealRange;
             return base.Clone(cleric);
         }
 
-        int IHealer.Range { get; set; } = int.MaxValue;
+        public int HealRange { get; set; } = int.MaxValue;
 
         public int Heal { get; set; } = 10;
 
-        int IRangedUnit.Range { get; set; } = 5;
+        public int Range { get; set; } = 5;
 
         public int RangeAttack { get; set; } = 10;
         public override bool CanBeAffectedBy(Type typeOfAbility)

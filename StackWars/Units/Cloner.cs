@@ -21,16 +21,16 @@ namespace StackWars.Units
         {
             Cloner cloner = new Cloner();
             cloner.RangeAttack = this.RangeAttack;
-            (cloner as IRangedUnit).Range = (this as IRangedUnit).Range;
-            (cloner as IClonerUnit).Range = (this as IClonerUnit).Range;
+            cloner.Range = this.Range;
+            cloner.CloneRange = this.Range;
             return base.Clone(cloner);
         }
 
-        int IRangedUnit.Range { get; set; } = 3;
+        public int Range { get; set; } = 3;
 
         public int RangeAttack { get; set; } = 5;
 
-        int IClonerUnit.Range { get; set; } = int.MaxValue;
+        public int CloneRange { get; set; } = int.MaxValue;
         public override bool CanBeAffectedBy(Type typeOfAbility)
         {
             if (typeOfAbility == typeof(BuffCommand))

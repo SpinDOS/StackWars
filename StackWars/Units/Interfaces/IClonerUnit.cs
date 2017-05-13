@@ -2,6 +2,6 @@
 {
     public interface IClonerUnit
     {
-        int Range { get; set; }
+        int CloneRange { get; set; }
     }
 }

@@ -28,7 +28,8 @@ namespace StackWars
                 throw new ArgumentNullException(nameof(unitFabric));
             Army1 = new Army("Army 1", unitFabric, armyCost);
             Army2 = new Army("Army 2", unitFabric, armyCost);
-            ILogger logger = new ConsoleLogger();
+
+            ILogger logger = new FileLogger("ProxyLogs.txt");
             for (int i = 0; i < Army1.Count; i++)
             {
                 if (Army1[i] is ArcherUnit)
@@ -133,7 +134,7 @@ namespace StackWars
             if (_random.NextDouble() > _healChance)
                 return;
             IHealer healer = allies[unitIndex] as IHealer;
-            int target = FindUnitInRange(allies, unitIndex, healer.Range, IsHealable);
+            int target = FindUnitInRange(allies, unitIndex, healer.HealRange, IsHealable);
             if (target >= 0)
                 list.Add(new HealCommand(allies, unitIndex, allies, target, healer.Heal));
         }
@@ -145,7 +146,7 @@ namespace StackWars
             if (_random.NextDouble() > _cloneChance)
                 return;
             IClonerUnit cloner = allies[unitIndex] as IClonerUnit;
-            int target = FindUnitInRange(allies, unitIndex, cloner.Range, IsClonable);
+            int target = FindUnitInRange(allies, unitIndex, cloner.CloneRange, IsClonable);
             if (target >= 0)
                 list.Add(new CloneCommand(allies, unitIndex, allies, target, _random.Next(allies.Count + 1)));
         }

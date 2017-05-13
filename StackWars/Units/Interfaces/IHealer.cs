@@ -8,7 +8,7 @@ namespace StackWars.Units.Interfaces
 {
     interface IHealer
     {
-        int Range { get; set; }
+        int HealRange { get; set; }
         int Heal { get; set; }
     }
 }

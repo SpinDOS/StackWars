@@ -56,6 +56,7 @@
     <Compile Include="Commands\RemoveRandomBuffCommand.cs" />
     <Compile Include="Commands\SingleTargetCommand.cs" />
     <Compile Include="Logger\ConsoleLogger.cs" />
+    <Compile Include="Logger\FileLogger.cs" />
     <Compile Include="Logger\ILogger.cs" />
     <Compile Include="Units\ArcherUnit.cs" />
     <Compile Include="Army.cs" />

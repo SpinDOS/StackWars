@@ -19,7 +19,7 @@ namespace StackWars.Units
             {
                 if (BaseUnit.CurrentHealth == value)
                     return;
-                Logger?.Log($"{this} (PROXY) health is changed from {this.CurrentHealth} to {value}");
+                Logger?.Log($"{DateTime.Now}: {this} health is changed from {this.CurrentHealth} to {value}");
                 BaseUnit.CurrentHealth = value;
             }
         }
