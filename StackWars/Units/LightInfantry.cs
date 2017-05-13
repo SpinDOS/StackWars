@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using StackWars.Commands;
-using StackWars.Units.Interfaces;
+﻿using StackWars.Units.Interfaces;
 
 namespace StackWars.Units
 {
@@ -19,10 +15,10 @@ namespace StackWars.Units
         public Unit Clone()
         {
             var clone = new LightInfantry();
-            clone.Attack = this.Attack;
-            clone.CurrentHealth = this.CurrentHealth;
-            clone.MaxHealth = this.MaxHealth;
-            clone.Defense = this.Defense;
+            clone.Attack = Attack;
+            clone.CurrentHealth = CurrentHealth;
+            clone.MaxHealth = MaxHealth;
+            clone.Defense = Defense;
             return clone;
         }
     }

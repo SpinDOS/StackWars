@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StackWars.Logger;
+﻿using StackWars.Logger;
 using StackWars.Units;
 using StackWars.Units.Interfaces;
 
@@ -12,12 +7,16 @@ namespace StackWars.Commands
     public class BuffCommand : SingleTargetCommand
     {
         private readonly BuffType _type;
+
         public BuffCommand(Army source, int sourceIndex, Army target, int targetIndex, BuffType type)
-            : base(source, sourceIndex, target, targetIndex) => _type = type;
+            : base(source, sourceIndex, target, targetIndex)
+        {
+            _type = type;
+        }
 
         public override void Execute(ILogger logger)
         {
-            IBuffableUnit unit = TargetArmy[TargetUnitIndex] as IBuffableUnit;
+            var unit = TargetArmy[TargetUnitIndex] as IBuffableUnit;
             switch (_type)
             {
             case BuffType.Armor:
@@ -37,7 +36,8 @@ namespace StackWars.Commands
         }
 
         public override void Undo(ILogger logger)
-            => TargetArmy[TargetUnitIndex] = (TargetArmy[TargetUnitIndex] as BuffedUnit).BaseUnit;
-
+        {
+            TargetArmy[TargetUnitIndex] = (TargetArmy[TargetUnitIndex] as BuffedUnit).BaseUnit;
+        }
     }
 }

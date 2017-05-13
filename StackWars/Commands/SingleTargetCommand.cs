@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StackWars.Commands
+﻿namespace StackWars.Commands
 {
     public abstract class SingleTargetCommand : Command
     {
@@ -14,6 +8,7 @@ namespace StackWars.Commands
             TargetArmy = target;
             TargetUnitIndex = targetIndex;
         }
+
         public Army TargetArmy { get; }
         public int TargetUnitIndex { get; }
     }

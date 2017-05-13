@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SpecialUnits;
 using StackWars.Commands;
 using StackWars.Logger;
 using StackWars.UnitFactory;
 
 namespace StackWars
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             CommandsInvoker.Logger = new ConsoleLogger();
             var unitFabric = new RandomUnitFactory();
-            int armyCost = 500;
+            var armyCost = 500;
             GameEngine.StartNewGame(unitFabric, armyCost);
             var gui = new ConsoleGUI();
             while (true)
@@ -24,7 +19,7 @@ namespace StackWars
                 gui.UndoAvailable = CommandsInvoker.CanUndo;
                 gui.RedoAvailable = CommandsInvoker.CanRedo;
                 gui.GameEnded = GameEngine.CurrentGame.GameEnded;
-                UserInput input = gui.GetUserInput();
+                var input = gui.GetUserInput();
                 switch (input)
                 {
                 case UserInput.CreateNewGame:
@@ -66,7 +61,6 @@ namespace StackWars
                     gui.ShowMessage(currentGame.Army1.Name + " wins");
                 else
                     gui.ShowMessage("Draw");
-
             }
         }
     }

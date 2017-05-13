@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using StackWars.Logger;
+﻿using StackWars.Logger;
 
 namespace StackWars.Commands
 {
@@ -14,6 +9,7 @@ namespace StackWars.Commands
             SourceArmy = source;
             SourceUnitIndex = sourceUnitIndex;
         }
+
         public Army SourceArmy { get; }
         public int? SourceUnitIndex { get; }
         public abstract void Execute(ILogger logger);

@@ -1,25 +1,24 @@
-﻿using System;
-using StackWars.Commands;
-
-namespace StackWars.Units.Interfaces
+﻿namespace StackWars.Units.Interfaces
 {
     public enum BuffType
     {
         Horse,
         Armor,
         Helmet,
-        Rapier,
+        Rapier
     }
 
     public interface IBuffableUnit
     {
         bool CanBeBuffed(BuffType type);
     }
+
     public interface IBufferUnit { }
+
     public abstract class BuffedUnit : WrapperUnit, IBuffableUnit
     {
         protected BuffedUnit(IBuffableUnit baseUnit) : base(baseUnit as Unit) { }
         public int BuffCount => BaseUnit is BuffedUnit buffUnit? buffUnit.BuffCount + 1 : 1;
-        public virtual bool CanBeBuffed(BuffType type) => (BaseUnit as IBuffableUnit).CanBeBuffed(type);
+        public virtual bool CanBeBuffed(BuffType type) { return (BaseUnit as IBuffableUnit).CanBeBuffed(type); }
     }
 }

@@ -1,6 +1,4 @@
-﻿using StackWars.Commands;
-using StackWars.Logger;
-using StackWars.Units.Interfaces;
+﻿using StackWars.Units.Interfaces;
 
 namespace StackWars.Units
 {
@@ -14,6 +12,6 @@ namespace StackWars.Units
             Defense = 45;
         }
 
-        public bool CanBeBuffed(BuffType type) => true;
+        public bool CanBeBuffed(BuffType type) { return true; }
     }
 }

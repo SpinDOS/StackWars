@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StackWars
 {
@@ -18,7 +14,7 @@ namespace StackWars
         SelectStrategyAllvsAll,
         Undo,
         Redo,
-        Exit,
+        Exit
     }
 
     public sealed class ConsoleGUI
@@ -63,7 +59,7 @@ namespace StackWars
                     return UserInput.ShowArmies;
                 case 5:
                 {
-                    UserInput result = SelectStrategy();
+                    var result = SelectStrategy();
                     if (result != UserInput.NotDefined)
                         return result;
                     break;
@@ -82,10 +78,9 @@ namespace StackWars
                     return UserInput.Exit;
                 }
             }
-            
         }
 
-        public void ShowMessage(string message) => Console.WriteLine(message);
+        public void ShowMessage(string message) { Console.WriteLine(message); }
 
         private static UserInput SelectStrategy()
         {
@@ -114,8 +109,6 @@ namespace StackWars
                     return UserInput.NotDefined;
                 }
             }
-
         }
     }
-        
 }

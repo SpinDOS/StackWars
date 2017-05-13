@@ -1,29 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StackWars.Units.Interfaces
+﻿namespace StackWars.Units.Interfaces
 {
     public abstract class WrapperUnit : Unit
     {
         protected WrapperUnit(Unit baseUnit) { BaseUnit = baseUnit; }
+
         public override int CurrentHealth
         {
             get => BaseUnit.CurrentHealth;
             set => BaseUnit.CurrentHealth = value;
         }
+
         public override int MaxHealth
         {
             get => BaseUnit.MaxHealth;
             set => BaseUnit.MaxHealth = value;
         }
+
         public override int Attack
         {
             get => BaseUnit.Attack;
             set => BaseUnit.Attack = value;
         }
+
         public override int Defense
         {
             get => BaseUnit.Defense;
@@ -31,6 +29,6 @@ namespace StackWars.Units.Interfaces
         }
 
         public Unit BaseUnit { get; set; }
-        public override string ToString() => BaseUnit.ToString();
+        public override string ToString() { return BaseUnit.ToString(); }
     }
 }

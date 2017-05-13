@@ -4,6 +4,7 @@
     {
         int CloneRange { get; set; }
     }
+
     public interface IClonableUnit
     {
         Unit Clone();

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StackWars.Units.Interfaces
+﻿namespace StackWars.Units.Interfaces
 {
     public interface IHealerUnit
     {
@@ -12,8 +6,5 @@ namespace StackWars.Units.Interfaces
         int Heal { get; set; }
     }
 
-    public interface IHealableUnit
-    {
-        
-    }
+    public interface IHealableUnit { }
 }

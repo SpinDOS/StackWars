@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using StackWars.Commands;
 using StackWars.Logger;
-using StackWars.UnitFactory;
 using StackWars.Units;
 using StackWars.Units.Interfaces;
 
@@ -12,28 +9,7 @@ namespace StackWars
 {
     public sealed class GameEngine
     {
-
-        #region Chances
-
-        private static readonly double _heavyInfantryBuffChance = 0.2;
-        private static readonly double _healChance = 0.3;
-        private static readonly double _cloneChance = 0.1;
-
-        private static readonly int DrawLimit = 10;
-
-        #endregion
-
-        #region Static members
-
-        static GameEngine _currentGame = null;
-        public static GameEngine CurrentGame => _currentGame;
-        public static GameEngine StartNewGame(UnitFactory.UnitFactory unitFabric, int armyCost)
-            => _currentGame = new GameEngine(unitFabric, armyCost);
-
-        static readonly Random Random = new Random();
-        static readonly BuffType[] BuffTypes = Enum.GetValues(typeof(BuffType)) as BuffType[];
-
-        #endregion
+        private int _turnsWithoutDeath;
 
         private GameEngine(UnitFactory.UnitFactory unitFabric, int armyCost)
         {
@@ -54,9 +30,9 @@ namespace StackWars
 
             void ReplaceClonersWithProxy(Army army)
             {
-                for (int i = 0; i < army.Count; i++)
+                for (var i = 0; i < army.Count; i++)
                 {
-                    Unit unit = army[i];
+                    var unit = army[i];
                     if (unit is IClonerUnit clonerUnit)
                         army[i] = new ProxyClonerUnit(clonerUnit, logger);
                 }
@@ -66,22 +42,21 @@ namespace StackWars
             ReplaceClonersWithProxy(Army2);
         }
 
-        public bool GameEnded { get; set; } = false;
+        public bool GameEnded { get; set; }
 
         public Army Army1 { get; }
         public Army Army2 { get; }
-
-        private int _turnsWithoutDeath = 0;
 
         public void Turn()
         {
             if (GameEnded)
                 return;
 
-            var combinations = Enumerable.Range(1, Army1.Count - 1).Select(i => (Army1, Army2, i))
+            var combinations = Enumerable.Range(1, Army1.Count - 1)
+                .Select(i => (Army1, Army2, i))
                 .Concat(Enumerable.Range(1, Army2.Count - 1).Select(i => (Army2, Army1, i)))
-                    .OrderBy(x => Random.Next());
-            
+                .OrderBy(x => Random.Next());
+
             foreach (var tuple in combinations)
                 HandleCommands(tuple.Item1, tuple.Item2, tuple.Item3);
 
@@ -96,7 +71,7 @@ namespace StackWars
                 HandleMeleeAttack(Army1, Army2);
             }
 
-            int unitsBefore = Army1.Count + Army2.Count;
+            var unitsBefore = Army1.Count + Army2.Count;
             CommandsInvoker.Execute(Army1.CollectDead());
             CommandsInvoker.Execute(Army2.CollectDead());
             CommandsInvoker.EndTurn();
@@ -126,11 +101,11 @@ namespace StackWars
 
         private void HandleRangeAttack(Army allies, Army enemies, int unitIndex)
         {
-            IRangedUnit rangedUnit = allies[unitIndex] as IRangedUnit;
-            int range = rangedUnit.Range - unitIndex;
+            var rangedUnit = allies[unitIndex] as IRangedUnit;
+            var range = rangedUnit.Range - unitIndex;
             if (range <= 0)
                 return;
-            int target = FindUnitInRange(enemies, 0, range, 
+            var target = FindUnitInRange(enemies, 0, range,
                 unit => unit.CurrentHealth > 0);
             if (target < 0)
                 return;
@@ -141,8 +116,8 @@ namespace StackWars
         {
             if (Random.NextDouble() > _heavyInfantryBuffChance)
                 return;
-            BuffType buff = BuffTypes[Random.Next(BuffTypes.Length)];
-            int target = FindUnitInRange(allies, unitIndex, 1, 
+            var buff = BuffTypes[Random.Next(BuffTypes.Length)];
+            var target = FindUnitInRange(allies, unitIndex, 1,
                 unit => unit.CurrentHealth > 0 && unit is IBuffableUnit buffable && buffable.CanBeBuffed(buff));
             if (target < 0)
                 return;
@@ -153,27 +128,27 @@ namespace StackWars
         {
             if (Random.NextDouble() > _healChance)
                 return;
-            IHealerUnit healer = allies[unitIndex] as IHealerUnit;
-            int target = FindUnitInRange(allies, unitIndex, healer.HealRange, 
+            var healer = allies[unitIndex] as IHealerUnit;
+            var target = FindUnitInRange(allies, unitIndex, healer.HealRange,
                 unit => unit.CurrentHealth > 0 && unit is IHealableUnit);
             if (target < 0)
                 return;
-            Unit targetUnit = allies[target];
-            int heal = Math.Min(targetUnit.MaxHealth, targetUnit.CurrentHealth + healer.Heal);
+            var targetUnit = allies[target];
+            var heal = Math.Min(targetUnit.MaxHealth, targetUnit.CurrentHealth + healer.Heal);
             CommandsInvoker.Execute(new HealCommand(allies, unitIndex, allies, target, heal));
         }
-   
+
 
         private void HandleCloner(Army allies, int unitIndex)
         {
             if (Random.NextDouble() > _cloneChance)
                 return;
-            IClonerUnit cloner = allies[unitIndex] as IClonerUnit;
-            int target = FindUnitInRange(allies, unitIndex, cloner.CloneRange, 
+            var cloner = allies[unitIndex] as IClonerUnit;
+            var target = FindUnitInRange(allies, unitIndex, cloner.CloneRange,
                 unit => unit.CurrentHealth > 0 && unit is IClonableUnit);
             if (target < 0)
                 return;
-            CommandsInvoker.Execute(new CloneCommand(allies, unitIndex, allies, target, 
+            CommandsInvoker.Execute(new CloneCommand(allies, unitIndex, allies, target,
                 Random.Next(allies.Count + 1)));
         }
 
@@ -184,49 +159,68 @@ namespace StackWars
             int start = Math.Max(0, mid - range), end = Math.Min(army.Count - 1, mid + range);
             if (end < 0)
                 end = army.Count - 1; // fix overflow error
-            int rand = Random.Next(start, end + 1);
-            for (int i = rand; i <= end; i++)
-            {
+            var rand = Random.Next(start, end + 1);
+            for (var i = rand; i <= end; i++)
                 if (selector(army[i]))
                     return i;
-            }
-            for (int i = start; i < rand; i++)
-            {
+            for (var i = start; i < rand; i++)
                 if (selector(army[i]))
                     return i;
-            }
             return -1;
         }
 
         private void HandleMeleeAttack(Army allies, Army enemies)
         {
-            Unit attacker = allies[0];
+            var attacker = allies[0];
             if (attacker.CurrentHealth > 0)
                 HandleDamage(allies, 0, enemies, 0, attacker.Attack);
         }
 
-        private static void HandleDamage(Army sourceArmy, int? sourceUnitIndex, 
+        private static void HandleDamage(Army sourceArmy, int? sourceUnitIndex,
             Army targetArmy, int targetUnitIndex, int damage)
         {
             if (damage <= 0)
                 return;
 
-            double CountDamage(int defense) => 1.0 * damage * (100 - defense) / 100;
+            double CountDamage(int defense) { return 1.0 * damage * (100 - defense) / 100; }
 
-            Unit target = targetArmy[targetUnitIndex];
+            var target = targetArmy[targetUnitIndex];
             if (target.CurrentHealth <= 0)
                 return;
-            int resultDamage = (int) CountDamage(target.Defense);
+            var resultDamage = (int) CountDamage(target.Defense);
             var dmgCommand = new DamageCommand(sourceArmy, sourceUnitIndex, targetArmy, targetUnitIndex, resultDamage);
             CommandsInvoker.Execute(dmgCommand);
 
             if (target.CurrentHealth <= 0 || !(target is BuffedUnit buffUnit))
                 return;
-            
+
             var removeBuff = new RemoveBuffCommand(sourceArmy, sourceUnitIndex,
                 targetArmy, targetUnitIndex, Random.Next(buffUnit.BuffCount));
             CommandsInvoker.Execute(removeBuff);
         }
 
+        #region Chances
+
+        private static readonly double _heavyInfantryBuffChance = 0.2;
+        private static readonly double _healChance = 0.3;
+        private static readonly double _cloneChance = 0.1;
+
+        private static readonly int DrawLimit = 10;
+
+        #endregion
+
+        #region Static members
+
+        public static GameEngine CurrentGame { get; private set; }
+
+        public static GameEngine StartNewGame(UnitFactory.UnitFactory unitFabric, int armyCost)
+        {
+            return CurrentGame = new GameEngine(unitFabric, armyCost);
+        }
+
+        private static readonly Random Random = new Random();
+        private static readonly BuffType[] BuffTypes = Enum.GetValues(typeof(BuffType)) as BuffType[];
+
+        #endregion
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using StackWars.Logger;
 using StackWars.Units;
 
@@ -15,7 +12,9 @@ namespace StackWars.Commands
         {
             Dead = dead.OrderBy(pair => pair.Key).ToArray();
         }
+
         public IEnumerable<KeyValuePair<int, Unit>> Dead { get; }
+
         public override void Execute(ILogger logger)
         {
             logger?.Log($"Collecting {Dead.Count()} deads from {SourceArmy.Name}");
