@@ -32,6 +32,10 @@ namespace StackWars.Commands
         {
             foreach (var command in Commands)
             {
+                if ((command.SourceUnitIndex.HasValue && command.SourceArmy[command.SourceUnitIndex.Value].CurrentHealth <= 0) || 
+                    (command is SingleTargetCommand targetCommand && 
+                        targetCommand.TargetArmy[targetCommand.TargetUnitIndex].CurrentHealth <= 0))
+                    continue;
                 command.Execute(Logger);
                 UndoStack.Push(command);
             }

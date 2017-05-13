@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StackWars.Commands;
 using StackWars.Units.Interfaces;
 
 namespace StackWars.Units
@@ -34,5 +35,11 @@ namespace StackWars.Units
         int IRangedUnit.Range { get; set; } = 5;
 
         public int RangeAttack { get; set; } = 10;
+        public override bool CanBeAffectedBy(Type typeOfAbility)
+        {
+            if (typeOfAbility == typeof(BuffCommand))
+                return false;
+            return base.CanBeAffectedBy(typeOfAbility);
+        }
     }
 }

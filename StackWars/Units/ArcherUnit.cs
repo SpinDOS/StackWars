@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StackWars.Commands;
 using StackWars.Logger;
 using StackWars.Units.Interfaces;
 
@@ -31,6 +32,12 @@ namespace StackWars.Units
                 RangeAttack = this.Range
             };
             return base.Clone(archer);
+        }
+        public override bool CanBeAffectedBy(Type typeOfAbility)
+        {
+            if (typeOfAbility == typeof(BuffCommand))
+                return false;
+            return base.CanBeAffectedBy(typeOfAbility);
         }
     }
 }

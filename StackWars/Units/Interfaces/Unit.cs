@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using StackWars.Logger;
@@ -25,5 +26,7 @@ namespace StackWars.Units
             pretendent.Attack = Attack;
             return pretendent;
         }
+
+        public virtual bool CanBeAffectedBy(Type typeOfAbility) => true;
     }
 }

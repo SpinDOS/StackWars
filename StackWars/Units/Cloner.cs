@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StackWars.Commands;
 using StackWars.Units.Interfaces;
 
 namespace StackWars.Units
@@ -30,5 +31,11 @@ namespace StackWars.Units
         public int RangeAttack { get; set; } = 5;
 
         int IClonerUnit.Range { get; set; } = int.MaxValue;
+        public override bool CanBeAffectedBy(Type typeOfAbility)
+        {
+            if (typeOfAbility == typeof(BuffCommand))
+                return false;
+            return base.CanBeAffectedBy(typeOfAbility);
+        }
     }
 }

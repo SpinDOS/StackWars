@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using StackWars.Logger;
 using StackWars.Units;
+using StackWars.Units.Interfaces;
 
 namespace StackWars.Commands
 {

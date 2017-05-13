@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using StackWars.Commands;
+using StackWars.Logger;
 using StackWars.UnitFactory;
 using StackWars.Units;
 using StackWars.Units.Interfaces;
@@ -27,6 +28,17 @@ namespace StackWars
                 throw new ArgumentNullException(nameof(unitFabric));
             Army1 = new Army("Army 1", unitFabric, armyCost);
             Army2 = new Army("Army 2", unitFabric, armyCost);
+            ILogger logger = new ConsoleLogger();
+            for (int i = 0; i < Army1.Count; i++)
+            {
+                if (Army1[i] is ArcherUnit)
+                    Army1[i] = new ProxyUnit(Army1[i], logger);
+            }
+            for (int i = 0; i < Army2.Count; i++)
+            {
+                if (Army2[i] is ArcherUnit)
+                    Army2[i] = new ProxyUnit(Army2[i], logger);
+            }
         }
 
         public bool GameEnded { get; private set; } = false;
@@ -98,7 +110,7 @@ namespace StackWars
             list.Add(new DamageCommand(allies, unitIndex, enemies, target, damage));
         }
 
-        bool IsBuffable(Unit unit) => unit is HeavyInfantry || unit is BuffUnit;
+        bool IsBuffable(Unit unit) => unit.CanBeAffectedBy(typeof(BuffCommand));
 
         private void HandleHeavyInfantryBuff(Army allies, int unitIndex, List<Command> list)
         {
@@ -114,7 +126,7 @@ namespace StackWars
             list.Add(new BuffCommand(allies, unitIndex, allies, target, buffType));
         }
 
-        bool IsHealable(Unit unit) => true;
+        bool IsHealable(Unit unit) => unit.CanBeAffectedBy(typeof(HealCommand));
 
         private void HandleHealer(Army allies, int unitIndex, List<Command> list)
         {
@@ -126,7 +138,7 @@ namespace StackWars
                 list.Add(new HealCommand(allies, unitIndex, allies, target, healer.Heal));
         }
 
-        private bool IsClonable(Unit unit) => true;
+        private bool IsClonable(Unit unit) => unit.CanBeAffectedBy(typeof(CloneCommand));
 
         private void HandleCloner(Army allies, int unitIndex, List<Command> list)
         {
@@ -151,7 +163,7 @@ namespace StackWars
                 if (selector(army[i]))
                     return i;
             }
-            for (int i = 0; i < rand; i++)
+            for (int i = start; i < rand; i++)
             {
                 if (selector(army[i]))
                     return i;

@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StackWars.Units.Interfaces;
 
-namespace StackWars.Units
+namespace StackWars.Units.Interfaces
 {
-    public abstract class BuffUnit : Unit
+    public abstract class WrapperUnit : Unit
     {
-        static readonly Random Random = new Random();
-        protected BuffUnit(Unit baseUnit) { BaseUnit = baseUnit; }
+        protected WrapperUnit(Unit baseUnit) { BaseUnit = baseUnit; }
         public override int CurrentHealth
         {
             get => BaseUnit.CurrentHealth;
@@ -33,12 +31,14 @@ namespace StackWars.Units
         }
 
         public Unit BaseUnit { get; set; }
-        public int BuffCount => BaseUnit is BuffUnit buffUnit? buffUnit.BuffCount + 1 : 1;
 
         protected Unit Clone(BuffUnit pretendent)
         {
             pretendent.BaseUnit = BaseUnit.Clone();
-            return base.Clone(pretendent);
+            return pretendent;
         }
+
+        public override bool CanBeAffectedBy(Type typeOfAbility) => BaseUnit.CanBeAffectedBy(typeOfAbility);
+        public override string ToString() => BaseUnit.ToString();
     }
 }
