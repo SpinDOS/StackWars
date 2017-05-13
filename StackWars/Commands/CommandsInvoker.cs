@@ -14,6 +14,9 @@ namespace StackWars.Commands
         static readonly Stack<Command> UndoStack = new Stack<Command>();
         static readonly Stack<Command> RedoStack = new Stack<Command>();
 
+        public static bool CanUndo => UndoStack.Count > 0;
+        public static bool CanRedo => RedoStack.Count > 0;
+
         public static void Execute(Command command)
         {
             if (command == null)

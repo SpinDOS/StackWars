@@ -15,9 +15,11 @@ namespace StackWars
 
         #region Chances
 
-        private static double _heavyInfantryBuffChance = 0.2;
-        private static double _healChance = 0.3;
-        private static double _cloneChance = 0.1;
+        private static readonly double _heavyInfantryBuffChance = 0.2;
+        private static readonly double _healChance = 0.3;
+        private static readonly double _cloneChance = 0.1;
+
+        private static readonly int DrawLimit = 10;
 
         #endregion
 
@@ -64,10 +66,12 @@ namespace StackWars
             ReplaceClonersWithProxy(Army2);
         }
 
-        public bool GameEnded { get; private set; } = false;
+        public bool GameEnded { get; set; } = false;
 
         public Army Army1 { get; }
         public Army Army2 { get; }
+
+        private int _turnsWithoutDeath = 0;
 
         public void Turn()
         {
@@ -92,11 +96,16 @@ namespace StackWars
                 HandleMeleeAttack(Army1, Army2);
             }
 
+            int unitsBefore = Army1.Count + Army2.Count;
             CommandsInvoker.Execute(Army1.CollectDead());
             CommandsInvoker.Execute(Army2.CollectDead());
             CommandsInvoker.EndTurn();
+            if (Army1.Count + Army2.Count == unitsBefore)
+                _turnsWithoutDeath++;
+            else
+                _turnsWithoutDeath = 0;
 
-            if (Army1.Count == 0 || Army2.Count == 0)
+            if (_turnsWithoutDeath == DrawLimit || Army1.Count == 0 || Army2.Count == 0)
                 GameEnded = true;
         }
 

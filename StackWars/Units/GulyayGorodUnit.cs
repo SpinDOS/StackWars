@@ -19,7 +19,17 @@ namespace StackWars.Units
         public override int CurrentHealth
         {
             get => _unit.GetCurrentHealth();
-            set => _unit.TakeDamage(_unit.GetDefence() + _unit.GetCurrentHealth() - value);
+            set
+            {
+                if (value < _unit.GetCurrentHealth())
+                    _unit.TakeDamage(_unit.GetDefence() + _unit.GetCurrentHealth() - value);
+                else // this type does not support clone or health restore, so we use reflection
+                    _unit.GetType()
+                    .GetField("_currentHealth", 
+                    System.Reflection.BindingFlags.NonPublic | 
+                    System.Reflection.BindingFlags.Instance)
+                    .SetValue(_unit, value);
+            }
         }
         public override int Attack
         {

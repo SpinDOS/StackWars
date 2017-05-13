@@ -16,48 +16,57 @@ namespace StackWars
         {
             CommandsInvoker.Logger = new ConsoleLogger();
             var unitFabric = new RandomUnitFactory();
-            int maxCost = 500;
-            GameEngine.StartNewGame(unitFabric, maxCost);
+            int armyCost = 500;
+            GameEngine.StartNewGame(unitFabric, armyCost);
+            var gui = new ConsoleGUI();
             while (true)
             {
-                Console.WriteLine("1. Start new game");
-                Console.WriteLine("2. Make turn");
-                Console.WriteLine("3. Play to end");
-                Console.WriteLine("4. Show armies");
-                Console.WriteLine("5. Undo");
-                Console.WriteLine("6. Redo");
-                Console.WriteLine("7. Exit");
-                Console.Write("Your choice: ");
-                if (!int.TryParse(Console.ReadLine(), out int choice))
-                    continue;
-                switch (choice)
+                gui.UndoAvailable = CommandsInvoker.CanUndo;
+                gui.RedoAvailable = CommandsInvoker.CanRedo;
+                gui.GameEnded = GameEngine.CurrentGame.GameEnded;
+                UserInput input = gui.GetUserInput();
+                switch (input)
                 {
-                    case 1:
-                        GameEngine.StartNewGame(unitFabric, maxCost);
-                        Console.WriteLine("Created!");
-                        break;
-                    case 2:
+                case UserInput.CreateNewGame:
+                    GameEngine.StartNewGame(unitFabric, armyCost);
+                    break;
+                case UserInput.MakeTurn:
+                    GameEngine.CurrentGame.Turn();
+                    break;
+                case UserInput.PlayToEnd:
+                    while (!GameEngine.CurrentGame.GameEnded)
                         GameEngine.CurrentGame.Turn();
-                        break;
-                    case 3:
-                        while (!GameEngine.CurrentGame.GameEnded)
-                            GameEngine.CurrentGame.Turn();
-                        break;
-                    case 4:
-                        Console.WriteLine(GameEngine.CurrentGame.Army1);
-                        Console.WriteLine(GameEngine.CurrentGame.Army2);
-                        break;
-                    case 5:
-                        CommandsInvoker.Undo();
-                        Console.WriteLine("Undo done");
-                        break;
-                    case 6:
-                        CommandsInvoker.Redo();
-                        Console.WriteLine("Redo done");
-                        break;
-                case 7:
-                        return;
+                    break;
+                case UserInput.ShowArmies:
+                    Console.WriteLine(GameEngine.CurrentGame.Army1);
+                    Console.WriteLine(GameEngine.CurrentGame.Army2);
+                    break;
+                case UserInput.SelectStrategy1vs1:
+                case UserInput.SelectStrategy3vs3:
+                case UserInput.SelectStrategyAllvsAll:
+                    throw new NotImplementedException();
+                case UserInput.Undo:
+                    CommandsInvoker.Undo();
+                    GameEngine.CurrentGame.GameEnded = false;
+                    gui.ShowMessage("Undo done");
+                    break;
+                case UserInput.Redo:
+                    CommandsInvoker.Redo();
+                    gui.ShowMessage("Redo done");
+                    break;
+                case UserInput.Exit:
+                    return;
                 }
+                var currentGame = GameEngine.CurrentGame;
+                if (!currentGame.GameEnded)
+                    continue;
+                if (currentGame.Army1.Count == 0)
+                    gui.ShowMessage(currentGame.Army2.Name + " wins");
+                else if (currentGame.Army2.Count == 0)
+                    gui.ShowMessage(currentGame.Army1.Name + " wins");
+                else
+                    gui.ShowMessage("Draw");
+
             }
         }
     }
