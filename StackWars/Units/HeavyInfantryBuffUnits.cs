@@ -37,6 +37,6 @@ namespace StackWars.Units
         public RapierBuffUnit(Unit baseUnit) : base(baseUnit) { }
         public override int Attack => BaseUnit.Attack + 20;
         public override Unit Clone() => base.Clone(new RapierBuffUnit(BaseUnit));
-        public override string ToString() => base.ToString() + " (with repier)";
+        public override string ToString() => base.ToString() + " (with rapier)";
     }
 }

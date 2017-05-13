@@ -7,14 +7,26 @@ using System.Threading.Tasks;
 
 namespace StackWars.Logger
 {
-    public sealed class FileLogger : ILogger
+    public sealed class FileLogger : ILogger, IDisposable
     {
+        private StreamWriter _file;
         public FileLogger(string filename)
         {
-            File.Create(filename);
-            Filename = filename;
+            _file = new StreamWriter(filename);
         }
-        public string Filename { get; }
-        public void Log(string message) {  File.AppendAllText(Filename, message + Environment.NewLine);}
+        public void Log(string message)
+        {
+            if (_file != null)
+                _file.WriteLine(message);
+            else
+                throw new ObjectDisposedException("FileLogger");
+        }
+        public void Dispose()
+        {
+            _file?.Dispose();
+            _file = null;
+        }
+
+        ~FileLogger() => Dispose();
     }
 }

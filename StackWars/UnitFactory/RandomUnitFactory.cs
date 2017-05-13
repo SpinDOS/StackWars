@@ -33,7 +33,7 @@ namespace StackWars.UnitFactory
                 return null;
             var selectedPair = possibleTypes[_random.Next(possibleTypes.Count)];
             maxPossibleCost -= selectedPair.Value;
-            return selectedPair.Key;
+            return selectedPair.Key.Clone();
 //
 //            double randomCost = _random.Next(100);
 //

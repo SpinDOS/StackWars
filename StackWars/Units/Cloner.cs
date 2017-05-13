@@ -33,7 +33,7 @@ namespace StackWars.Units
         public int CloneRange { get; set; } = int.MaxValue;
         public override bool CanBeAffectedBy(Type typeOfAbility)
         {
-            if (typeOfAbility == typeof(BuffCommand))
+            if (typeOfAbility == typeof(BuffCommand) || typeOfAbility == typeof(CloneCommand))
                 return false;
             return base.CanBeAffectedBy(typeOfAbility);
         }

@@ -9,13 +9,13 @@ using StackWars.Units.Interfaces;
 namespace StackWars.Units
 {
     [Cost(Cost = 30)]
-    public sealed class Cleric : Unit, IRangedUnit, IHealer
+    public sealed class Cleric : Unit, IRangedUnit, IHealer, IObservableUnit
     {
         public Cleric()
         {
             Attack = 10;
             Defense = 5;
-            MaxHealth = CurrentHealth = 100;
+            MaxHealth = CurrentHealth = 1;
         }
 
         public override Unit Clone()
@@ -25,6 +25,8 @@ namespace StackWars.Units
             cleric.RangeAttack = this.RangeAttack;
             cleric.Range = this.Range;
             cleric.HealRange = this.HealRange;
+            foreach (var observer in _observers)
+                cleric.AddObserver(observer);
             return base.Clone(cleric);
         }
 
@@ -40,6 +42,26 @@ namespace StackWars.Units
             if (typeOfAbility == typeof(BuffCommand))
                 return false;
             return base.CanBeAffectedBy(typeOfAbility);
+        }
+
+        private readonly List<IUnitObserver> _observers = new List<IUnitObserver>();
+
+        public void AddObserver(IUnitObserver observer) { if (observer != null) _observers.Add(observer); }
+        public void RemoveObserver(IUnitObserver observer) { _observers.Remove(observer); }
+
+        public override int CurrentHealth
+        {
+            set
+            {
+                if (value <= 0)
+                {
+                    UnitObservingState state = new UnitObservingState(this.CurrentHealth, value);
+                    foreach (var observer in _observers)
+                        observer.Notify(this, state);
+                }
+
+                base.CurrentHealth = value;
+            }
         }
     }
 }

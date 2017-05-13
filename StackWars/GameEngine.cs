@@ -14,7 +14,7 @@ namespace StackWars
     {
         private static double _heavyInfantryBuffChance = 0.2;
         private static double _healChance = 0.3;
-        private static double _cloneChance = 0.3;
+        private static double _cloneChance = 0.1;
 
         static GameEngine _currentGame = null;
         public static GameEngine CurrentGame => _currentGame;
@@ -30,15 +30,28 @@ namespace StackWars
             Army2 = new Army("Army 2", unitFabric, armyCost);
 
             ILogger logger = new FileLogger("ProxyLogs.txt");
+            IUnitObserver observer1 = new ConsoleUnitObserver(), observer2 = new BeepUnitObserver();
             for (int i = 0; i < Army1.Count; i++)
             {
-                if (Army1[i] is ArcherUnit)
-                    Army1[i] = new ProxyUnit(Army1[i], logger);
+                Unit unit = Army1[i];
+                if (unit is ArcherUnit)
+                    Army1[i] = new ProxyUnit(unit, logger);
+                if (unit is IObservableUnit observable)
+                {
+                    observable.AddObserver(observer1);
+                    observable.AddObserver(observer2);
+                }
             }
             for (int i = 0; i < Army2.Count; i++)
             {
-                if (Army2[i] is ArcherUnit)
-                    Army2[i] = new ProxyUnit(Army2[i], logger);
+                Unit unit = Army2[i];
+                if (unit is ArcherUnit)
+                    Army2[i] = new ProxyUnit(unit, logger);
+                if (unit is IObservableUnit observable)
+                {
+                    observable.AddObserver(observer1);
+                    observable.AddObserver(observer2);
+                }
             }
         }
 

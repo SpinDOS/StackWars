@@ -58,6 +58,7 @@
     <Compile Include="Logger\ConsoleLogger.cs" />
     <Compile Include="Logger\FileLogger.cs" />
     <Compile Include="Logger\ILogger.cs" />
+    <Compile Include="Logger\UnitObservers.cs" />
     <Compile Include="Units\ArcherUnit.cs" />
     <Compile Include="Army.cs" />
     <Compile Include="CostAttribute.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Units\Interfaces\IHealer.cs" />
     <Compile Include="Units\Interfaces\IRangedUnit.cs" />
     <Compile Include="UnitFactory\UnitCreator.cs" />
+    <Compile Include="Units\Interfaces\IUnitObserving.cs" />
     <Compile Include="Units\Interfaces\WrapperUnit.cs" />
     <Compile Include="Units\LigthInfantry.cs" />
     <Compile Include="Program.cs" />
