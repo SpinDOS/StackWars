@@ -23,7 +23,9 @@ namespace StackWars
                 Console.WriteLine("2. Make turn");
                 Console.WriteLine("3. Play to end");
                 Console.WriteLine("4. Show armies");
-                Console.WriteLine("5. Exit");
+                Console.WriteLine("5. Undo");
+                Console.WriteLine("6. Redo");
+                Console.WriteLine("7. Exit");
                 Console.Write("Your choice: ");
                 if (!int.TryParse(Console.ReadLine(), out int choice))
                     continue;
@@ -41,10 +43,18 @@ namespace StackWars
                             GameEngine.CurrentGame.Turn();
                         break;
                     case 4:
-                        Console.WriteLine(CommandsInvoker.Army1);
-                        Console.WriteLine(CommandsInvoker.Army2);
+                        Console.WriteLine(GameEngine.CurrentGame.Army1);
+                        Console.WriteLine(GameEngine.CurrentGame.Army2);
                         break;
                     case 5:
+                        CommandsInvoker.Undo();
+                        Console.WriteLine("Undo done");
+                        break;
+                    case 6:
+                        CommandsInvoker.Redo();
+                        Console.WriteLine("Redo done");
+                        break;
+                case 7:
                         return;
                 }
             }

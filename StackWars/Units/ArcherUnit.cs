@@ -15,7 +15,7 @@ namespace StackWars.Units
         {
             MaxHealth = CurrentHealth = 60;
             Attack = 15;
-            Defense = 1;
+            Defense = 10;
             Range = 10;
             RangeAttack = 15;
         }

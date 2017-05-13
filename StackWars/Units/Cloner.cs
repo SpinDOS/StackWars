@@ -13,7 +13,7 @@ namespace StackWars.Units
         public Cloner()
         {
             Attack = 5;
-            Defense = 1;
+            Defense = 15;
             MaxHealth = CurrentHealth = 30;
         }
         public override Unit Clone()

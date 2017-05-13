@@ -13,6 +13,7 @@ namespace StackWars
     {
         private static double _heavyInfantryBuffChance = 0.2;
         private static double _healChance = 0.3;
+        private static double _cloneChance = 0.3;
 
         static GameEngine _currentGame = null;
         public static GameEngine CurrentGame => _currentGame;
@@ -24,19 +25,22 @@ namespace StackWars
         {
             if (unitFabric == null)
                 throw new ArgumentNullException(nameof(unitFabric));
-            CommandsInvoker.Army1 = new Army("Army 1", unitFabric, armyCost);
-            CommandsInvoker.Army2 = new Army("Army 2", unitFabric, armyCost);
+            Army1 = new Army("Army 1", unitFabric, armyCost);
+            Army2 = new Army("Army 2", unitFabric, armyCost);
         }
 
         public bool GameEnded { get; private set; } = false;
+
+        public Army Army1 { get; }
+        public Army Army2 { get; }
 
         public void Turn()
         {
             if (GameEnded)
                 return;
 
-            var commands = GetCommands(CommandsInvoker.Army1, CommandsInvoker.Army2);
-            commands.AddRange(GetCommands(CommandsInvoker.Army2, CommandsInvoker.Army1));
+            var commands = GetCommands(Army1, Army2);
+            commands.AddRange(GetCommands(Army2, Army1));
             commands = commands.OrderBy(a => _random.Next()).ToList();
             (Command melee1, Command melee2) = GetMeleeAttacks();
             commands.Add(melee1);
@@ -57,9 +61,11 @@ namespace StackWars
             }
 
             CommandsInvoker.AddCommand(commands);
-
+            CommandsInvoker.Flush();
+            CommandsInvoker.AddCommand(Army1.CollectDead());
+            CommandsInvoker.AddCommand(Army2.CollectDead());
             CommandsInvoker.EndTurn();
-            if (CommandsInvoker.Army1.Count == 0 || CommandsInvoker.Army2.Count == 0)
+            if (Army1.Count == 0 || Army2.Count == 0)
                 GameEnded = true;
         }
 
@@ -75,7 +81,8 @@ namespace StackWars
                     HandleHeavyInfantryBuff(allies, i, result);
                 if (unit is IHealer)
                     HandleHealer(allies, i, result);
-
+                if (unit is IClonerUnit)
+                    HandleCloner(allies, i, result);
             }
             return result;
         }
@@ -119,6 +126,18 @@ namespace StackWars
                 list.Add(new HealCommand(allies, unitIndex, allies, target, healer.Heal));
         }
 
+        private bool IsClonable(Unit unit) => true;
+
+        private void HandleCloner(Army allies, int unitIndex, List<Command> list)
+        {
+            if (_random.NextDouble() > _cloneChance)
+                return;
+            IClonerUnit cloner = allies[unitIndex] as IClonerUnit;
+            int target = FindUnitInRange(allies, unitIndex, cloner.Range, IsClonable);
+            if (target >= 0)
+                list.Add(new CloneCommand(allies, unitIndex, allies, target, _random.Next(allies.Count + 1)));
+        }
+
         private int FindUnitInRange(Army army, int mid, int range, Func<Unit, bool> selector)
         {
             if (army.Count == 0)
@@ -142,10 +161,10 @@ namespace StackWars
 
         private (Command melee1, Command melee2) GetMeleeAttacks()
         {
-            Unit unit1 = CommandsInvoker.Army1.First(), unit2 = CommandsInvoker.Army2.First();
-            Command command1 = new MeleeDamageCommand(CommandsInvoker.Army1, CommandsInvoker.Army2, 
+            Unit unit1 = Army1.First(), unit2 = Army2.First();
+            Command command1 = new MeleeDamageCommand(Army1, Army2, 
                 CountDamageWithDefense(unit2.Attack, unit1.Defense));
-            Command command2 = new MeleeDamageCommand(CommandsInvoker.Army2, CommandsInvoker.Army1, 
+            Command command2 = new MeleeDamageCommand(Army2, Army1, 
                 CountDamageWithDefense(unit1.Attack, unit2.Defense));
             if (_random.Next(2) == 0)
                 return (command1, command2);

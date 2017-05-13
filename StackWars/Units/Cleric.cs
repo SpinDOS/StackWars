@@ -13,7 +13,7 @@ namespace StackWars.Units
         public Cleric()
         {
             Attack = 10;
-            Defense = 1;
+            Defense = 5;
             MaxHealth = CurrentHealth = 100;
         }
 

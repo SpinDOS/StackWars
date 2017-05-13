@@ -9,12 +9,11 @@ namespace StackWars.Commands
 {
     public static class CommandsInvoker
     {
-        public static Army Army1 { get; set; } = null;
-        public static Army Army2 { get; set; } = null;
         public static ILogger Logger { get; set; } = null;
 
         static readonly List<Command> Commands = new List<Command>();
         static readonly Stack<Command> UndoStack = new Stack<Command>();
+        static readonly Stack<Command> RedoStack = new Stack<Command>();
 
         public static void AddCommand(Command command)
         {
@@ -29,7 +28,7 @@ namespace StackWars.Commands
             Commands.AddRange(commands);
         }
 
-        public static void EndTurn()
+        public static void Flush()
         {
             foreach (var command in Commands)
             {
@@ -37,14 +36,41 @@ namespace StackWars.Commands
                 UndoStack.Push(command);
             }
             Commands.Clear();
+        }
 
-            foreach (var command in 
-                new Command[] { Army1.CollectDead(), Army2.CollectDead() })
-            {
-                command.Execute(Logger);
-                UndoStack.Push(command);
-            }
+        public static void EndTurn()
+        {
+            Flush();
             UndoStack.Push(null);
+            RedoStack.Clear();
+        }
+
+        public static void Undo()
+        {
+            if (UndoStack.Count == 0)
+                return;
+            RedoStack.Push(UndoStack.Pop());
+            while (UndoStack.Count > 0)
+            {
+                Command command = UndoStack.Pop();
+                if (command != null)
+                    command.Undo(Logger);
+                else
+                    break;
+                RedoStack.Push(command);
+            }
+        }
+        public static void Redo()
+        {
+            while (RedoStack.Count > 0)
+            {
+                Command command = RedoStack.Pop();
+                UndoStack.Push(command);
+                if (command != null)
+                    command.Execute(null);
+                else
+                    break;
+            }
         }
     }
 }

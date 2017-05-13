@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using StackWars.Commands;
 using StackWars.UnitFactory;
@@ -10,6 +11,7 @@ namespace StackWars
 {
     public sealed class Army : List<Unit>
     {
+        static readonly Random Random = new Random();
         public Army(string name, UnitFactory.UnitFactory fabric, int armyCost)
         {
             if (fabric == null)
@@ -22,7 +24,7 @@ namespace StackWars
                 Unit unit = fabric.GetUnit(ref armyCost);
                 if (unit == null)
                     break;
-                this.Add(unit);
+                this.Insert(Random.Next(this.Count + 1), unit);
             }
         }
         public string Name { get; }

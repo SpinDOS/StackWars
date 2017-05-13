@@ -31,24 +31,28 @@ namespace StackWars.UnitFactory
             var possibleTypes = _units.TakeWhile(pair => pair.Value <= argCost).ToList();
             if (possibleTypes.Count == 0)
                 return null;
-
-            double randomCost = _random.Next(100);
-
-            double average = possibleTypes.Average(pair => pair.Value);
-            double mid = 100.0 / possibleTypes.Count;
-            double sum = 0;
-
-            foreach (var pair in possibleTypes)
-            {
-                sum += mid + (pair.Value - average);
-                if (sum < randomCost)
-                    continue;
-                maxPossibleCost -= pair.Value;
-                return pair.Key.Clone();
-            }
-            KeyValuePair<Unit, int> last = possibleTypes.Last();
-            maxPossibleCost -= last.Value;
-            return last.Key.Clone();
+            var selectedPair = possibleTypes[_random.Next(possibleTypes.Count)];
+            maxPossibleCost -= selectedPair.Value;
+            return selectedPair.Key;
+//
+//            double randomCost = _random.Next(100);
+//
+//            int n = possibleTypes.Count;
+//            double average = possibleTypes.Average(pair => pair.Value);
+//            double mid = 100.0 / n;
+//            double sum = 0;
+//
+//            foreach (var pair in possibleTypes)
+//            {
+//                sum += mid + (pair.Value - average);
+//                if (sum < randomCost)
+//                    continue;
+//                maxPossibleCost -= pair.Value;
+//                return pair.Key.Clone();
+//            }
+//            KeyValuePair<Unit, int> last = possibleTypes.Last();
+//            maxPossibleCost -= last.Value;
+//            return last.Key.Clone();
         }
     }
 }
