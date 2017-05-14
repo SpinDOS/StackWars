@@ -28,13 +28,14 @@ namespace StackWars.GameEngine
                 }
 
             ILogger logger = FileLogger.GetFileLogger("ProxyLogs.txt");
+            logger.Log($"New game started: {DateTime.Now}");
 
             void ReplaceClonersWithProxy(Army army)
             {
                 for (var i = 0; i < army.Count; i++)
                 {
                     var unit = army[i];
-                    if (unit is IClonerUnit clonerUnit)
+                    if (unit is ClonerUnit clonerUnit)
                         army[i] = new ProxyClonerUnit(clonerUnit, logger);
                 }
             }
@@ -55,26 +56,27 @@ namespace StackWars.GameEngine
             if (GameEnded)
                 return;
 
-            var magics = Strategy.GetMagic(Army1, Army2);
+            var magics = Strategy.GetMagicUnits(Army1, Army2);
             foreach (var tuple in magics)
                 HandleCommands(tuple.allies, tuple.enemies, tuple.alliesIndex);
 
-            var melees = Strategy.GetMelees(Army1, Army2);
+            var melees = Strategy.GetMeleeAttacks(Army1, Army2);
             foreach (var tuple in melees)
-                HandleDamage(tuple.allies, tuple.alliesIndex, tuple.enemies, 
-                    tuple.targetIndex, tuple.damage);
+                MakeDamage(tuple.allies, tuple.alliesIndex, tuple.enemies, 
+                    tuple.targetIndex, tuple.allies[tuple.alliesIndex].Attack);
 
             var unitsBefore = Army1.Count + Army2.Count;
             CommandsInvoker.Execute(Army1.CollectDead());
             CommandsInvoker.Execute(Army2.CollectDead());
             CommandsInvoker.EndTurn();
+
             if (Army1.Count + Army2.Count == unitsBefore)
                 _turnsWithoutDeath++;
             else
                 _turnsWithoutDeath = 0;
 
             if (++_turns == DrawLimit || _turnsWithoutDeath == DrawLimitTurnsWithoutDeaths || 
-                Army1.Count == 0 || Army2.Count == 0)
+                                                    Army1.Count == 0 || Army2.Count == 0)
                 GameEnded = true;
         }
 
@@ -100,7 +102,7 @@ namespace StackWars.GameEngine
                                         rangedUnit.Range, unit => unit.CurrentHealth > 0);
             if (!target.HasValue)
                 return;
-            HandleDamage(allies, unitIndex, enemies, target.Value, rangedUnit.RangeAttack);
+            MakeDamage(allies, unitIndex, enemies, target.Value, rangedUnit.RangeAttack);
         }
 
         private void HandleBuffer(Army allies, int unitIndex)
@@ -145,18 +147,19 @@ namespace StackWars.GameEngine
                 Random.Next(allies.Count + 1)));
         }
 
-        private static void HandleDamage(Army sourceArmy, int? sourceUnitIndex,
+        private static void MakeDamage(Army sourceArmy, int? sourceUnitIndex,
             Army targetArmy, int targetUnitIndex, int damage)
         {
             if (damage <= 0 || 
                 (sourceUnitIndex.HasValue && sourceArmy[sourceUnitIndex.Value].CurrentHealth <= 0))
                 return;
 
-            double CountDamage(int defense) { return 1.0 * damage * (100 - defense) / 100; }
-
             var target = targetArmy[targetUnitIndex];
             if (target.CurrentHealth <= 0)
                 return;
+
+            double CountDamage(int defense) { return 1.0 * damage * (100 - defense) / 100; }
+            
             var resultDamage = (int) CountDamage(target.Defense);
             var dmgCommand = new DamageCommand(sourceArmy, sourceUnitIndex, targetArmy, targetUnitIndex, resultDamage);
             CommandsInvoker.Execute(dmgCommand);

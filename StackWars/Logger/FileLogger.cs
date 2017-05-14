@@ -14,7 +14,7 @@ namespace StackWars.Logger
         private FileLogger(string filename)
         {
             Filename = filename;
-            _file = new StreamWriter(filename);
+            _file = new StreamWriter(filename) {AutoFlush = true};
         }
 
         public string Filename { get; }

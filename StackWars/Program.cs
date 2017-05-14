@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using StackWars.Commands;
 using StackWars.Logger;
 using StackWars.UnitFactory;
@@ -47,7 +48,7 @@ namespace StackWars
                     gui.ShowMessage("Strategy changed to 3 vs 3");
                     break;
                 case UserInput.SelectStrategyAllvsAll:
-                    GEngine.CurrentGame.Strategy = FightStrategyAllvsAll.Singleton;
+                    GEngine.CurrentGame.Strategy = FightStrategyAllVsAll.Singleton;
                     gui.ShowMessage("Strategy changed to all vs all");
                     break;
                 case UserInput.Undo:

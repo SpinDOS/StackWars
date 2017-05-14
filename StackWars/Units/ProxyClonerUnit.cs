@@ -4,10 +4,10 @@ using StackWars.Units.Interfaces;
 
 namespace StackWars.Units
 {
-    public sealed class ProxyClonerUnit : WrapperUnit, IClonerUnit
+    public sealed class ProxyClonerUnit : WrapperUnit, IClonerUnit, IRangedUnit
     {
-        public ProxyClonerUnit(IClonerUnit baseUnit, ILogger logger)
-            : base(baseUnit as Unit)
+        public ProxyClonerUnit(ClonerUnit baseUnit, ILogger logger)
+            : base(baseUnit)
         {
             Logger = logger;
         }
@@ -31,6 +31,18 @@ namespace StackWars.Units
         {
             get => (BaseUnit as IClonerUnit).CloneRange;
             set => (BaseUnit as IClonerUnit).CloneRange = value;
+        }
+
+        public int Range
+        {
+            get => (BaseUnit as IRangedUnit).Range;
+            set => (BaseUnit as IRangedUnit).Range = value;
+        }
+
+        public int RangeAttack
+        {
+            get => (BaseUnit as IRangedUnit).RangeAttack;
+            set => (BaseUnit as IRangedUnit).RangeAttack = value;
         }
     }
 }

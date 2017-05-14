@@ -12,7 +12,7 @@ namespace StackWars.Units
         {
             Attack = 10;
             Defense = 5;
-            MaxHealth = CurrentHealth = 1;
+            MaxHealth = CurrentHealth = 10;
         }
 
         public override int CurrentHealth
@@ -30,7 +30,7 @@ namespace StackWars.Units
             }
         }
 
-        public int HealRange { get; set; } = int.MaxValue;
+        public int HealRange { get; set; } = 100;
 
         public int Heal { get; set; } = 10;
 
