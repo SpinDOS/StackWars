@@ -12,7 +12,7 @@ namespace StackWars.Units
         {
             Attack = 10;
             Defense = 5;
-            MaxHealth = CurrentHealth = 10;
+            MaxHealth = CurrentHealth = 30;
         }
 
         public override int CurrentHealth
@@ -30,9 +30,10 @@ namespace StackWars.Units
             }
         }
 
+        public int HealChance { get; set; } = 20;
         public int HealRange { get; set; } = 100;
 
-        public int Heal { get; set; } = 10;
+        public int Heal { get; set; } = 8;
 
         public void AddObserver(IUnitObserver observer)
         {
@@ -41,8 +42,8 @@ namespace StackWars.Units
 
         public void RemoveObserver(IUnitObserver observer) { _observers.Remove(observer); }
 
-        public int Range { get; set; } = 5;
+        public int Range { get; set; } = 3;
 
-        public int RangeAttack { get; set; } = 10;
+        public int RangeAttack { get; set; } = 15;
     }
 }

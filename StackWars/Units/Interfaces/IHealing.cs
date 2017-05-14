@@ -2,6 +2,7 @@
 {
     public interface IHealerUnit
     {
+        int HealChance { get; set; }
         int HealRange { get; set; }
         int Heal { get; set; }
     }

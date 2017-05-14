@@ -29,6 +29,7 @@ namespace StackWars.UnitFactory
             var possibleTypes = _units.TakeWhile(pair => pair.Value <= argCost).ToList();
             if (possibleTypes.Count == 0)
                 return null;
+            
             var selectedPair = possibleTypes[_random.Next(possibleTypes.Count)];
             maxPossibleCost -= selectedPair.Value;
             return Activator.CreateInstance(selectedPair.Key) as Unit;

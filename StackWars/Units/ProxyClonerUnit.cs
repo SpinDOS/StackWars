@@ -27,6 +27,12 @@ namespace StackWars.Units
             }
         }
 
+        public int CloneChance
+        {
+            get => (BaseUnit as IClonerUnit).CloneChance;
+            set => (BaseUnit as IClonerUnit).CloneChance = value;
+        }
+
         public int CloneRange
         {
             get => (BaseUnit as IClonerUnit).CloneRange;

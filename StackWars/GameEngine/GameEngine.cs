@@ -75,9 +75,10 @@ namespace StackWars.GameEngine
             else
                 _turnsWithoutDeath = 0;
 
-            if (++_turns == DrawLimit || _turnsWithoutDeath == DrawLimitTurnsWithoutDeaths || 
-                                                    Army1.Count == 0 || Army2.Count == 0)
+            if (++_turns == DrawLimit || _turnsWithoutDeath == DrawLimitTurnsWithoutDeaths ||
+                            Army1.Count == 0 || Army2.Count == 0)
                 GameEnded = true;
+
         }
 
         private void HandleCommands(Army allies, Army enemies, int i)
@@ -107,10 +108,11 @@ namespace StackWars.GameEngine
 
         private void HandleBuffer(Army allies, int unitIndex)
         {
-            if (Random.NextDouble() > _heavyInfantryBuffChance)
+            var buffer = allies[unitIndex] as IBufferUnit;
+            if (Random.Next(100) > buffer.BuffChance)
                 return;
             var buff = BuffTypes[Random.Next(BuffTypes.Length)];
-            var target = Strategy.FindRandomUnitInRange(allies, unitIndex, 1,
+            var target = Strategy.FindRandomUnitInRange(allies, unitIndex, buffer.BuffRange,
                 unit => unit.CurrentHealth > 0 && unit is IBuffableUnit buffable && buffable.CanBeBuffed(buff));
             if (!target.HasValue)
                 return;
@@ -119,9 +121,9 @@ namespace StackWars.GameEngine
 
         private void HandleHealer(Army allies, int unitIndex)
         {
-            if (Random.NextDouble() > _healChance)
-                return;
             var healer = allies[unitIndex] as IHealerUnit;
+            if (Random.Next(100) > healer.HealChance)
+                return;
             var target = Strategy.FindRandomUnitInRange(allies, unitIndex, healer.HealRange,
                 unit => unit.CurrentHealth > 0 && unit is IHealableUnit);
             if (!target.HasValue)
@@ -136,9 +138,9 @@ namespace StackWars.GameEngine
 
         private void HandleCloner(Army allies, int unitIndex)
         {
-            if (Random.NextDouble() > _cloneChance)
-                return;
             var cloner = allies[unitIndex] as IClonerUnit;
+            if (Random.Next(100) > cloner.CloneChance)
+                return;
             var target = Strategy.FindRandomUnitInRange(allies, unitIndex, cloner.CloneRange,
                 unit => unit.CurrentHealth > 0 && unit is IClonableUnit);
             if (!target.HasValue)
@@ -171,18 +173,7 @@ namespace StackWars.GameEngine
                 targetArmy, targetUnitIndex, Random.Next(buffUnit.BuffCount));
             CommandsInvoker.Execute(removeBuff);
         }
-
-        #region Chances
-
-        private static readonly double _heavyInfantryBuffChance = 0.2;
-        private static readonly double _healChance = 0.3;
-        private static readonly double _cloneChance = 0.1;
-
-        private static readonly int DrawLimit = 1000;
-        private static readonly int DrawLimitTurnsWithoutDeaths = 15;
-
-        #endregion
-
+        
         #region Static members
 
         public static GameEngine CurrentGame { get; private set; }
@@ -194,6 +185,9 @@ namespace StackWars.GameEngine
 
         private static readonly Random Random = new Random();
         private static readonly BuffType[] BuffTypes = Enum.GetValues(typeof(BuffType)) as BuffType[];
+
+        private const int DrawLimit = 1000;
+        private const int DrawLimitTurnsWithoutDeaths = 15;
 
         #endregion
     }

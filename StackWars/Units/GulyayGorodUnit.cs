@@ -4,10 +4,10 @@ using SpecialUnits;
 
 namespace StackWars.Units
 {
-    [Cost(Cost = 15)]
+    [Cost(Cost = 65)]
     public sealed class GulyayGorodUnit : Unit
     {
-        private readonly GulyayGorod _unit = new GulyayGorod(300, 0, 15);
+        private readonly GulyayGorod _unit = new GulyayGorod(180, 0, 25);
 
         public override int MaxHealth
         {

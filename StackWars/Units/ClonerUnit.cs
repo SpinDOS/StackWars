@@ -7,15 +7,17 @@ namespace StackWars.Units
     {
         public ClonerUnit()
         {
-            Attack = 5;
+            Attack = 10;
             Defense = 15;
-            MaxHealth = CurrentHealth = 30;
+            MaxHealth = CurrentHealth = 40;
         }
 
-        public int CloneRange { get; set; } = 5;
+        public int CloneChance { get; set; } = 5;
 
-        public int Range { get; set; } = 3;
+        public int CloneRange { get; set; } = 3;
 
-        public int RangeAttack { get; set; } = 5;
+        public int Range { get; set; } = 2;
+
+        public int RangeAttack { get; set; } = 25;
     }
 }

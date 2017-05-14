@@ -8,7 +8,7 @@ namespace StackWars.Units
         public ArcherUnit()
         {
             MaxHealth = CurrentHealth = 60;
-            Attack = 15;
+            Attack = 10;
             Defense = 10;
         }
 
@@ -26,7 +26,7 @@ namespace StackWars.Units
             return clone;
         }
 
-        public int Range { get; set; } = 10;
-        public int RangeAttack { get; set; } = 15;
+        public int Range { get; set; } = 4;
+        public int RangeAttack { get; set; } = 40;
     }
 }

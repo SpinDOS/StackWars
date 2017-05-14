@@ -2,7 +2,7 @@
 
 namespace StackWars.Units
 {
-    [Cost(Cost = 10)]
+    [Cost(Cost = 15)]
     public sealed class LightInfantry : Unit, IClonableUnit, IHealableUnit, IBufferUnit
     {
         public LightInfantry()
@@ -21,5 +21,8 @@ namespace StackWars.Units
             clone.Defense = Defense;
             return clone;
         }
+
+        public int BuffChance { get; set; } = 10;
+        public int BuffRange { get; set; } = 1;
     }
 }

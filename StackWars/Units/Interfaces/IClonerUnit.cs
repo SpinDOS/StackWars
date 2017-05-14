@@ -2,6 +2,7 @@
 {
     public interface IClonerUnit
     {
+        int CloneChance { get; set; }
         int CloneRange { get; set; }
     }
 

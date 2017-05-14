@@ -27,7 +27,11 @@ namespace StackWars
                 switch (input)
                 {
                 case UserInput.CreateNewGame:
+                {
+                    var strategy = engine.Strategy;
                     engine = GEngine.StartNewGame(unitFabric, armyCost);
+                    engine.Strategy = strategy;
+                }
                     break;
                 case UserInput.MakeTurn:
                     engine.Turn();

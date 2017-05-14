@@ -13,7 +13,11 @@
         bool CanBeBuffed(BuffType type);
     }
 
-    public interface IBufferUnit { }
+    public interface IBufferUnit
+    {
+        int BuffChance { get; set; }
+        int BuffRange { get; set; }
+    }
 
     public abstract class BuffedUnit : WrapperUnit, IBuffableUnit
     {

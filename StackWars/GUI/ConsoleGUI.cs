@@ -27,7 +27,8 @@ namespace StackWars.GUI
                     Console.WriteLine("Invalid input");
                     continue;
                 }
-                if (GameEnded && choice != 1 && choice != 4 && choice != 6 && choice != 8)
+                if (GameEnded && choice != 1 && choice != 4 && choice != 5 
+                    && choice != 6 && choice != 8)
                 {
                     Console.WriteLine("Game ended");
                     continue;
