@@ -4,6 +4,7 @@ using StackWars.Commands;
 using StackWars.Logger;
 using StackWars.UnitFactory;
 using StackWars.GameEngine;
+using StackWars.GUI;
 using GEngine = StackWars.GameEngine.GameEngine;
 
 namespace StackWars
@@ -14,46 +15,46 @@ namespace StackWars
         {
             CommandsInvoker.Logger = new ConsoleLogger();
             var unitFabric = new RandomUnitFactory();
+            var gui = StackWarsGUIFactory.GetGUI();
             var armyCost = 500;
-            GEngine.StartNewGame(unitFabric, armyCost);
-            var gui = new ConsoleGUI();
+            var engine = GEngine.StartNewGame(unitFabric, armyCost);
             while (true)
             {
                 gui.UndoAvailable = CommandsInvoker.CanUndo;
                 gui.RedoAvailable = CommandsInvoker.CanRedo;
-                gui.GameEnded = GEngine.CurrentGame.GameEnded;
+                gui.GameEnded = engine.GameEnded;
                 var input = gui.GetUserInput();
                 switch (input)
                 {
                 case UserInput.CreateNewGame:
-                    GEngine.StartNewGame(unitFabric, armyCost);
+                    engine = GEngine.StartNewGame(unitFabric, armyCost);
                     break;
                 case UserInput.MakeTurn:
-                    GEngine.CurrentGame.Turn();
+                    engine.Turn();
                     break;
                 case UserInput.PlayToEnd:
-                    while (!GEngine.CurrentGame.GameEnded)
-                        GEngine.CurrentGame.Turn();
+                    while (!engine.GameEnded)
+                        engine.Turn();
                     break;
                 case UserInput.ShowArmies:
-                    Console.WriteLine(GEngine.CurrentGame.Army1);
-                    Console.WriteLine(GEngine.CurrentGame.Army2);
+                    Console.WriteLine(engine.Army1);
+                    Console.WriteLine(engine.Army2);
                     break;
                 case UserInput.SelectStrategy1vs1:
-                    GEngine.CurrentGame.Strategy = FightStrategy1Vs1.Singleton;
+                    engine.Strategy = FightStrategy1Vs1.Singleton;
                     gui.ShowMessage("Strategy changed to 1 vs 1");
                     break;
                 case UserInput.SelectStrategy3vs3:
-                    GEngine.CurrentGame.Strategy = FightStrategy3Vs3.Singleton;
+                    engine.Strategy = FightStrategy3Vs3.Singleton;
                     gui.ShowMessage("Strategy changed to 3 vs 3");
                     break;
                 case UserInput.SelectStrategyAllvsAll:
-                    GEngine.CurrentGame.Strategy = FightStrategyAllVsAll.Singleton;
+                    engine.Strategy = FightStrategyAllVsAll.Singleton;
                     gui.ShowMessage("Strategy changed to all vs all");
                     break;
                 case UserInput.Undo:
                     CommandsInvoker.Undo();
-                    GEngine.CurrentGame.GameEnded = false;
+                    engine.GameEnded = false;
                     gui.ShowMessage("Undo done");
                     break;
                 case UserInput.Redo:
@@ -63,13 +64,12 @@ namespace StackWars
                 case UserInput.Exit:
                     return;
                 }
-                var currentGame = GEngine.CurrentGame;
-                if (!currentGame.GameEnded)
+                if (!engine.GameEnded)
                     continue;
-                if (currentGame.Army1.Count == 0)
-                    gui.ShowMessage(currentGame.Army2.Name + " wins");
-                else if (currentGame.Army2.Count == 0)
-                    gui.ShowMessage(currentGame.Army1.Name + " wins");
+                if (engine.Army1.Count == 0)
+                    gui.ShowMessage(engine.Army2.Name + " wins");
+                else if (engine.Army2.Count == 0)
+                    gui.ShowMessage(engine.Army1.Name + " wins");
                 else
                     gui.ShowMessage("Draw");
             }

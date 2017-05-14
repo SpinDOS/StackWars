@@ -1,23 +1,8 @@
 ﻿using System;
 
-namespace StackWars
+namespace StackWars.GUI
 {
-    public enum UserInput
-    {
-        NotDefined,
-        CreateNewGame,
-        MakeTurn,
-        PlayToEnd,
-        ShowArmies,
-        SelectStrategy1vs1,
-        SelectStrategy3vs3,
-        SelectStrategyAllvsAll,
-        Undo,
-        Redo,
-        Exit
-    }
-
-    public sealed class ConsoleGUI
+    public sealed class ConsoleGUI : IStackWarsGUI
     {
         public bool UndoAvailable { get; set; }
         public bool RedoAvailable { get; set; }

@@ -57,11 +57,12 @@
     <Compile Include="Commands\HealCommand.cs" />
     <Compile Include="Commands\RemoveBuffCommand.cs" />
     <Compile Include="Commands\SingleTargetCommand.cs" />
-    <Compile Include="ConsoleGUI.cs" />
+    <Compile Include="GUI\ConsoleGUI.cs" />
     <Compile Include="GameEngine\FightStrategy1vs1.cs" />
     <Compile Include="GameEngine\FightStrategy3vs3.cs" />
     <Compile Include="GameEngine\FightStrategyAllvsAll.cs" />
     <Compile Include="GameEngine\IFightStrategy.cs" />
+    <Compile Include="GUI\IStackWarsGUI.cs" />
     <Compile Include="Logger\ConsoleLogger.cs" />
     <Compile Include="Logger\FileLogger.cs" />
     <Compile Include="Logger\ILogger.cs" />
