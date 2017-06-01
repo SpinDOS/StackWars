@@ -10,7 +10,7 @@ namespace StackWars
     {
         private static readonly Random Random = new Random();
 
-        public Army(string name, UnitFactory.UnitFactory fabric, int armyCost)
+        public Army(string name, UnitFactory.IUnitFactory fabric, int armyCost)
         {
             if (fabric == null)
                 throw new ArgumentNullException(nameof(fabric));

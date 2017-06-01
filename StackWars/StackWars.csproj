@@ -80,7 +80,7 @@
     <Compile Include="Units\HeavyInfantry.cs" />
     <Compile Include="Units\Interfaces\IHealing.cs" />
     <Compile Include="Units\Interfaces\IRangedUnit.cs" />
-    <Compile Include="UnitFactory\UnitCreator.cs" />
+    <Compile Include="UnitFactory\IUnitCreator.cs" />
     <Compile Include="Units\Interfaces\IUnitObserving.cs" />
     <Compile Include="Units\Interfaces\WrapperUnit.cs" />
     <Compile Include="Units\LightInfantry.cs" />

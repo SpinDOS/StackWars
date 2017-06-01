@@ -12,7 +12,7 @@ namespace StackWars.GameEngine
         private int _turnsWithoutDeath = 0;
         private int _turns = 0;
 
-        private GameEngine(UnitFactory.UnitFactory unitFabric, int armyCost)
+        private GameEngine(UnitFactory.IUnitFactory unitFabric, int armyCost)
         {
             if (unitFabric == null)
                 throw new ArgumentNullException(nameof(unitFabric));
@@ -178,7 +178,7 @@ namespace StackWars.GameEngine
 
         public static GameEngine CurrentGame { get; private set; }
 
-        public static GameEngine StartNewGame(UnitFactory.UnitFactory unitFabric, int armyCost)
+        public static GameEngine StartNewGame(UnitFactory.IUnitFactory unitFabric, int armyCost)
         {
             return CurrentGame = new GameEngine(unitFabric, armyCost);
         }

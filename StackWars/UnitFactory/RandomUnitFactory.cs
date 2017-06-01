@@ -5,7 +5,7 @@ using StackWars.Units;
 
 namespace StackWars.UnitFactory
 {
-    public sealed class RandomUnitFactory : UnitFactory
+    public sealed class RandomUnitFactory : IUnitFactory
     {
         private readonly Random _random = new Random();
         private readonly Dictionary<Type, int> _units;
